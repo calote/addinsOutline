@@ -103,31 +103,41 @@ get_tcontents <- function() {
 
     output$rawInputValue <- renderPrint({
       #str(input$fichero_main)
-      listado = c("/Users", unlist(input$fichero_main[[1]])[-1] )
-      nfichero = paste(listado,sep="",collapse = "/")
-      if (file.exists(nfichero)) {
+      #browser()
+      if (unlist(input$fichero_main[[1]])[-1]>0) {
+      #if (length(input$fichero_main)>0) {
+      #  if (length(unlist(input$fichero_main[[1]]))>0) {
+
+        listado = c("/Users", unlist(input$fichero_main[[1]])[-1] )
+        nfichero = paste(listado,sep="",collapse = "/")
+        if (file.exists(nfichero)) {
 
 
-        VR_Info$nfichero_prin <- nfichero
-        VR_Info$dir_trab <- dirname(VR_Info$nfichero_prin)
-        VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo(VR_Info$nfichero_prin)
-        if (is.null(VR_Info$tb_lr_limpio2)) {
-          # si se produce error es individual
-          VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo_no_prin(VR_Info$nfichero_prin)
+          VR_Info$nfichero_prin <- nfichero
+          VR_Info$dir_trab <- dirname(VR_Info$nfichero_prin)
+          VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo(VR_Info$nfichero_prin)
+          if (is.null(VR_Info$tb_lr_limpio2)) {
+            # si se produce error es individual
+            VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo_no_prin(VR_Info$nfichero_prin)
+          }
+
+          # nfichero_prin <<- nfichero
+          # dir_trab <<- dirname(nfichero_prin)
+          # tb_lr_limpio2 <<- func_tcontenido_Rmd_todo(nfichero_prin)
+          # if (is.null(tb_lr_limpio2)) {
+          #   # si se produce error es individual
+          #   tb_lr_limpio2 <<- func_tcontenido_Rmd_todo_no_prin(nfichero_prin)
+          # }
+
+          nfichero
+        } else {
+          ""
         }
 
-        # nfichero_prin <<- nfichero
-        # dir_trab <<- dirname(nfichero_prin)
-        # tb_lr_limpio2 <<- func_tcontenido_Rmd_todo(nfichero_prin)
-        # if (is.null(tb_lr_limpio2)) {
-        #   # si se produce error es individual
-        #   tb_lr_limpio2 <<- func_tcontenido_Rmd_todo_no_prin(nfichero_prin)
-        # }
-
-        nfichero
       } else {
         ""
       }
+
 
     })
 
@@ -173,6 +183,7 @@ get_tcontents <- function() {
     output$TablaDT = renderDT({
       s1 = input$IdFichero
       s2 = input$fichero_main
+      #browser()
       DT::datatable(VR_Info$tb_lr_limpio2,  #tb_lr_limpio2,
                     selection = "single",
                     class = 'cell-border stripe compact',
@@ -193,7 +204,8 @@ get_tcontents <- function() {
 
 
   } # final server
-  #runGadget(ui, server, viewer = paneViewer(minHeight = 500)) # default
+  #runGadget(ui, server, viewer = paneViewer(minHeight = "maximize")) # default
+  #runGadget(ui, server, viewer = paneViewer()) # default
   runGadget(ui, server, viewer = dialogViewer("Tabla Contenido", height = 600,width = 900))
   #runGadget(ui, server, viewer = browserViewer())
 }

@@ -1,4 +1,4 @@
 Name: Show Outline R Markdown
 Description: Displays Outline of an R Markdown file with and without child files
 Binding: get_tcontents
-Interactive: false
+Interactive: true
