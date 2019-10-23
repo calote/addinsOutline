@@ -1,7 +1,7 @@
 Package: addinsOutline
 Type: Package
 Title: Addins Displays Outline of an R Markdown file with and without child files
-Version: 0.1.0
+Version: 0.1.1
 Author: Pedro L. Luque Calvo
 Maintainer: The package maintainer <calvo@us.es>
 Description: More about what it does (maybe more than one line)

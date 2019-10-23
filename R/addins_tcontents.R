@@ -42,7 +42,14 @@ get_tcontents <- function() {
         )
       ),
       DT::DTOutput("TablaDT"),
-      verbatimTextOutput('rawInputValue')
+      fluidRow(
+        column(width=2,
+               shiny::actionButton("IdActualizar","Actualizar RMD")
+        ),
+        column(width=11,offset=1,
+           verbatimTextOutput('rawInputValue')
+        )
+      )
       #verbatimTextOutput('filepaths')
     )
   ) # final ui
@@ -75,11 +82,26 @@ get_tcontents <- function() {
     } else {
       #browser()
       Ini_nfichero_prin = "/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd"
-      Ini_dir_trab = dirname(Ini_nfichero_prin)
-      Ini_tb_lr_limpio2 = func_tcontenido_Rmd_todo(Ini_nfichero_prin)
-      tb_lr_limpio_Fijo = tb_lr_limpio2
-      lficheros = c("Todo",sort(unique(Ini_tb_lr_limpio2$Fichero)))
-      VG_label_select <- "Selecciona el fichero"
+      if (file.exists(Ini_nfichero_prin)) {
+        Ini_dir_trab = dirname(Ini_nfichero_prin)
+        Ini_tb_lr_limpio2 = func_tcontenido_Rmd_todo(Ini_nfichero_prin)
+        tb_lr_limpio_Fijo = Ini_tb_lr_limpio2
+        lficheros = c("Todo",sort(unique(Ini_tb_lr_limpio2$Fichero)))
+        VG_label_select <- "Selecciona el fichero"
+      } else {
+        Ini_dir_trab = dirname(Ini_nfichero_prin)
+        Ini_tb_lr_limpio2 = tibble::tibble(
+          Fichero = c(NA),
+          Titulos = c(NA),
+          PosicionFila = c(NA),
+          TipoChunk = c(NA)
+        )
+
+        tb_lr_limpio_Fijo = Ini_tb_lr_limpio2
+        lficheros = c("Todo",sort(unique(Ini_tb_lr_limpio2$Fichero)))
+        VG_label_select <- "Seleccione un fichero RMD"
+
+      }
 
     }
 
@@ -189,6 +211,7 @@ get_tcontents <- function() {
     output$rawInputValue <- renderPrint({
       #str(input$fichero_main)
       #browser()
+      x = input$IdActualizar
       if (length(unlist(input$fichero_main[[1]])[-1])>0) {
       #if (length(input$fichero_main)>0) {
       #  if (length(unlist(input$fichero_main[[1]]))>0) {
@@ -291,7 +314,7 @@ get_tcontents <- function() {
 
     })
 
-    output$TablaDT = renderDT({
+    output$TablaDT = DT::renderDT({
       s1 = input$IdFichero
       s2 = input$fichero_main
       #browser()
@@ -303,11 +326,11 @@ get_tcontents <- function() {
                                   lengthMenu = c(10,25,100,200),
                                   searchHighlight = TRUE,
                                   deferRender = TRUE,
-                                  scrollY = 200,
+                                  scrollY = 300,
                                   scroller = TRUE,
                                   language = list(search = "Filtrar:",
                                                   url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json'),
-                                  initComplete = JS(
+                                  initComplete = DT::JS(
                                     "function(settings, json) {",
                                     "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});",
                                     "}")
