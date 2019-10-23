@@ -2,7 +2,7 @@ Package: addinsOutline
 Type: Package
 Title: Addins Displays Outline of an R Markdown file with and without child files
 Version: 0.1.0
-Author: Who wrote it
+Author: Pedro L. Luque Calvo
 Maintainer: The package maintainer <calvo@us.es>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.

@@ -1,0 +1,26 @@
+---
+title: "Leeme"
+output: html_notebook
+---
+
+# Guía con el paquete addnexamples
+
+- [RStudio addins](https://rstudio.github.io/rstudioaddins/)
+- [Github addinexamples](https://github.com/rstudio/addinexamples)
+
+```{r eval=FALSE}
+devtools::install_github("rstudio/addinexamples", type = "source")
+```
+
+# Información sobre DT
+
+- [DT](https://rstudio.github.io/DT/)
+    
+    * [Scroller](https://rstudio.github.io/DT/extensions.html)
+
+
+
+```{r}
+get_tcontents()
+```
+

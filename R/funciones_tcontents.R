@@ -10,7 +10,7 @@ func_tcontenido_Rmd = function(ficheroRmd_prin) {
   if (length(crmd2)<1) {
     return(NULL)
   }
-  
+
   lista_res = vector("list",length(crmd2))
   #browser()
   for (i in 1:length(crmd2)) {
@@ -69,7 +69,7 @@ func_tcontenido_Rmd_tb = function(lr) {
     t1 = tibble::tibble(
       Fichero = rep(fiche,length(vtitulos)),
       Titulos = vtitulos,
-      PosicionFila = ptitulos 
+      PosicionFila = ptitulos
     )
     if (is.null(tt)) {
       tt = t1
@@ -90,8 +90,8 @@ func_abrir_tituloficheroRmd = function(tb_lr,cual,dir_trabajo) {
 }
 
 func_limpiar_dentrochunk = function(ficheroRmd_prin) {
-  #browser()  
-  # parte 1  
+  #browser()
+  # parte 1
   fic02 = readLines(ficheroRmd_prin,warn = FALSE)
   lrmd = str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
   crmd = str_extract(fic02[lrmd],"'[:graph:]*\\.Rmd'")
@@ -113,7 +113,7 @@ func_limpiar_dentrochunk = function(ficheroRmd_prin) {
                                     rep("inicio",length(lt1b)),
                                     rep("fin",length(lt2)))
     )
-    lbtt2 = lbtt %>% 
+    lbtt2 = lbtt %>%
       arrange(Filas)
     #titulos_posiciones = sort(lt)
     titulos_posiciones = lbtt2$Filas
@@ -148,14 +148,14 @@ func_limpiar_dentrochunk = function(ficheroRmd_prin) {
   }
   #return(tt)
   return(tt)
-  
-  
+
+
 }
 
 
 func_limpiar_dentrochunk_no_prin = function(ficheroRmd_prin) {
-  #browser()  
-  # parte 1  
+  #browser()
+  # parte 1
   # fic02 = readLines(ficheroRmd_prin,warn = FALSE)
   # lrmd = str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
   # crmd = str_extract(fic02[lrmd],"'[:graph:]*\\.Rmd'")
@@ -178,7 +178,7 @@ func_limpiar_dentrochunk_no_prin = function(ficheroRmd_prin) {
                                     rep("inicio",length(lt1b)),
                                     rep("fin",length(lt2)))
     )
-    lbtt2 = lbtt %>% 
+    lbtt2 = lbtt %>%
       arrange(Filas)
     #titulos_posiciones = sort(lt)
     titulos_posiciones = lbtt2$Filas
@@ -213,8 +213,8 @@ func_limpiar_dentrochunk_no_prin = function(ficheroRmd_prin) {
   }
   #return(tt)
   return(tt)
-  
-  
+
+
 }
 
 
@@ -222,7 +222,7 @@ func_limpiar_dentrochunk_no_prin = function(ficheroRmd_prin) {
 # dir_trab = dirname(nfichero_prin)
 # lr = func_tcontenido_Rmd(nfichero_prin)
 # tb_lr = func_tcontenido_Rmd_tb(lr)
-# tb_lr2 = tb_lr %>% 
+# tb_lr2 = tb_lr %>%
 #   filter(!str_detect(Titulos,"salida_"))
 # func_abrir_tituloficheroRmd(tb_lr2,cual=78,dir_trab)
 # DT::datatable(tb_lr2)
@@ -232,7 +232,7 @@ func_limpiar_dentrochunk_no_prin = function(ficheroRmd_prin) {
 
 func_limpiar_mejorado = function(tb_lr,tb_limp) {
   tb_lr_limpio = tb_lr
-  tb_lr_limpio$borrar = FALSE 
+  tb_lr_limpio$borrar = FALSE
   for (i in 1:nrow(tb_lr)) {
     fila = tb_lr$PosicionFila[i]
     fichero = tb_lr$Fichero[i]
@@ -254,28 +254,28 @@ func_limpiar_mejorado = function(tb_lr,tb_limp) {
           if ((tipo3=="fin") & (fila<fila3) ){
             tb_lr_limpio$borrar[i] = TRUE
             j = nrow(tb_limp)+1
-          } 
+          }
         }
       }
       if ((Bsi1) & (fichero!=fichero2)) {
         j = nrow(tb_limp)+1
       }
       j = j+1
-    }  
-    
+    }
+
   }
-  
-  
-  tb_lr_limpio2 = tb_lr_limpio %>% 
-    filter(!borrar) %>% 
+
+
+  tb_lr_limpio2 = tb_lr_limpio %>%
+    filter(!borrar) %>%
     select(-borrar)
-  
+
   return(tb_lr_limpio2)
 }
 
 
 func_tcontenido_Rmd_todo = function(nfichero_prin) {
-  
+
   lr = func_tcontenido_Rmd(nfichero_prin)
   if (is.null(lr)) {
     return(NULL)
@@ -285,12 +285,12 @@ func_tcontenido_Rmd_todo = function(nfichero_prin) {
   tb_lr_limpio2 = func_limpiar_mejorado(tb_lr,tb_limp)
   #func_abrir_tituloficheroRmd(tb_limp,cual=3,dir_trab)
   return(tb_lr_limpio2)
-  
+
 }
 
 
 func_tcontenido_Rmd_todo_no_prin = function(nfichero_prin) {
-  
+
   #lr = func_tcontenido_Rmd(nfichero_prin)
   #browser()
   lr = func_tcontenido_Rmd_no_prin(nfichero_prin)
@@ -301,11 +301,11 @@ func_tcontenido_Rmd_todo_no_prin = function(nfichero_prin) {
   #func_abrir_tituloficheroRmd(tb_limp,cual=3,dir_trab)
   tb_lr_limpio2$Fichero = basename(tb_lr_limpio2$Fichero)
   return(tb_lr_limpio2)
-  
+
 }
 
 
-  
+
 
 
 # tb_lr_limpio2 = func_limpiar_mejorado(tb_lr,tb_limp)

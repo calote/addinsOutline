@@ -15,26 +15,6 @@
 #' at the cursor position.
 #'
 #' @export
-library(miniUI)
-library(shiny)
-library(shinyFiles)
-library(DT)
-library(stringr)
-source("./R/funciones_tcontents.R")
-
-#fic02 = readLines("/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd")
-
-
-nfichero_prin = "/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd"
-dir_trab = dirname(nfichero_prin)
-tb_lr_limpio2 = func_tcontenido_Rmd_todo(nfichero_prin)
-
-#DT::datatable(tb_lr_limpio2)
-#func_abrir_tituloficheroRmd(tb_lr_limpio2,cual=104,dir_trab)
-tb_lr_limpio_Fijo = tb_lr_limpio2
-lficheros = c("Todo",sort(unique(tb_lr_limpio2$Fichero)))
-
-
 get_tcontents <- function() {
 
 
@@ -66,14 +46,97 @@ get_tcontents <- function() {
       #verbatimTextOutput('filepaths')
     )
   ) # final ui
+##########----------
 
-  server <- function(input, output) {
+##########----------
+  server <- function(input, output, session) {
+
+    contexto <- rstudioapi::getActiveDocumentContext()
+    texto_contexto <- contexto$contents
+    Ini_nfichero_prin = contexto$path
+    #browser()
+    if (file.exists(Ini_nfichero_prin)) {
+      Ini_dir_trab = dirname(Ini_nfichero_prin)
+      Ini_tb_lr_limpio2 <- func_tcontenido_Rmd_todo(Ini_nfichero_prin)
+      if (is.null(Ini_tb_lr_limpio2)) {
+        # si se produce error es individual
+        Ini_tb_lr_limpio2 <- func_tcontenido_Rmd_todo_no_prin(Ini_nfichero_prin)
+        tb_lr_limpio_Fijo = Ini_tb_lr_limpio2
+        lficheros <- c("Todo")
+        VG_label_select <- "No Seleccionable (no contiene ficheros hijos)"
+      } else {
+        tb_lr_limpio_Fijo = Ini_tb_lr_limpio2
+        lficheros <- c("Todo",sort(unique(Ini_tb_lr_limpio2$Fichero)))
+        VG_label_select <- "Selecciona el fichero"
+      }
+
+
+
+    } else {
+      #browser()
+      Ini_nfichero_prin = "/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd"
+      Ini_dir_trab = dirname(Ini_nfichero_prin)
+      Ini_tb_lr_limpio2 = func_tcontenido_Rmd_todo(Ini_nfichero_prin)
+      tb_lr_limpio_Fijo = tb_lr_limpio2
+      lficheros = c("Todo",sort(unique(Ini_tb_lr_limpio2$Fichero)))
+      VG_label_select <- "Selecciona el fichero"
+
+    }
+
+
+
+    #browser()
+    # VR_Info_inicial = reactiveValues(
+    #    fic_inicial00 = rstudioapi::getActiveDocumentContext(),
+    #    fic_inicial = rstudioapi::getActiveDocumentContext()$path
+    # )
 
     VR_Info <- reactiveValues(
-      nfichero_prin = "/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd",
-      dir_trab = dirname(nfichero_prin),
-      tb_lr_limpio2 = func_tcontenido_Rmd_todo(nfichero_prin)
+      #nfichero_prin = "/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd",
+      #nfichero_prin = rstudioapi::getActiveDocumentContext()$path,
+      #dir_trab = dirname(nfichero_prin),
+      #tb_lr_limpio2 = func_tcontenido_Rmd_todo(nfichero_prin)
+      nfichero_prin = Ini_nfichero_prin,
+      dir_trab = Ini_dir_trab,
+      tb_lr_limpio2 = Ini_tb_lr_limpio2
     )
+
+
+    observe({
+       isolate({
+         #browser()
+         VR_Info$nfichero_prin = Ini_nfichero_prin
+         VR_Info$dir_trab = Ini_dir_trab
+         VR_Info$tb_lr_limpio2 = Ini_tb_lr_limpio2
+       })
+
+    })
+
+        # observe({
+    #   #browser()
+    #   nfichero = rstudioapi::getActiveDocumentContext()$path
+    #
+    #   isolate({
+    #     if (file.exists(nfichero)) {
+    #       VR_Info$nfichero_prin <- nfichero
+    #       VR_Info$dir_trab <- dirname(VR_Info$nfichero_prin)
+    #       VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo(VR_Info$nfichero_prin)
+    #       if (is.null(VR_Info$tb_lr_limpio2)) {
+    #         # si se produce error es individual
+    #         VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo_no_prin(VR_Info$nfichero_prin)
+    #         lficheros <<- c("Todo")
+    #         VG_label_select <<- "No Seleccionable (no contiene ficheros hijos)"
+    #       } else {
+    #         tb_lr_limpio_Fijo = VR_Info$tb_lr_limpio2
+    #         lficheros <<- c("Todo",sort(unique(tb_lr_limpio2$Fichero)))
+    #         VG_label_select <<- "Selecciona el fichero"
+    #       }
+    #     }
+    #
+    #   })
+    #
+    #
+    # })
 
     #VR_Info$nfichero_prin <- nfichero_prin
     #VR_Info$dir_trab = dir_trab
@@ -95,16 +158,38 @@ get_tcontents <- function() {
     # })
     #/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd
 
-    observeEvent(input$fichero_main, {
-      nfichero = shinyFileChoose(input, 'fichero_main', roots=c(roots='/Users/'), filetypes=c('Rmd'))
-      #nfichero_prin <<- "/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd"
-      #nfichero = paste("/Users",unlist(input$fichero_main[[1]]),sep="/",collapse = "/")
-    })
+
+    # #observe({
+    # observeEvent(input$fichero_main,{
+    #   #x <- input$fichero_main
+    #
+    #   # Can use character(0) to remove all choices
+    #   #if (is.null(x))
+    #   #  x <- character(0)
+    #
+    #   # shiny::selectInput("IdFichero","Selecciona el fichero",
+    #   #                    choices = lficheros,selected = 1)
+    #
+    #
+    #   # Can also set the label and select items
+    #   updateSelectInput(session, "IdFichero",
+    #                     label = "Selecciona el fichero 2",
+    #                     choices = lficheros,
+    #                     selected = 1
+    #   )
+    # })
+
+    # output$filepaths <- renderPrint({
+    #   x = input$IdCheckAbrir
+    #   #browser()
+    #   VR_Info_inicial$fic_inicial
+    #   #VR_Info_inicial$fic_inicial00
+    # })
 
     output$rawInputValue <- renderPrint({
       #str(input$fichero_main)
       #browser()
-      if (unlist(input$fichero_main[[1]])[-1]>0) {
+      if (length(unlist(input$fichero_main[[1]])[-1])>0) {
       #if (length(input$fichero_main)>0) {
       #  if (length(unlist(input$fichero_main[[1]]))>0) {
 
@@ -112,14 +197,24 @@ get_tcontents <- function() {
         nfichero = paste(listado,sep="",collapse = "/")
         if (file.exists(nfichero)) {
 
+          isolate({
+            VR_Info$nfichero_prin <- nfichero
+            VR_Info$dir_trab <- dirname(VR_Info$nfichero_prin)
+            VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo(VR_Info$nfichero_prin)
+            if (is.null(VR_Info$tb_lr_limpio2)) {
+              # si se produce error es individual
+              VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo_no_prin(VR_Info$nfichero_prin)
+              tb_lr_limpio_Fijo <<- VR_Info$tb_lr_limpio2
+              lficheros <<- c("Todo")
+              VG_label_select <<- "No Seleccionable (no contiene ficheros hijos)"
+            } else {
+              tb_lr_limpio_Fijo <<- VR_Info$tb_lr_limpio2
+              lficheros <<- c("Todo",sort(unique(VR_Info$tb_lr_limpio2$Fichero)))
+              VG_label_select <<- "Selecciona el fichero"
 
-          VR_Info$nfichero_prin <- nfichero
-          VR_Info$dir_trab <- dirname(VR_Info$nfichero_prin)
-          VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo(VR_Info$nfichero_prin)
-          if (is.null(VR_Info$tb_lr_limpio2)) {
-            # si se produce error es individual
-            VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo_no_prin(VR_Info$nfichero_prin)
-          }
+            }
+
+          })
 
           # nfichero_prin <<- nfichero
           # dir_trab <<- dirname(nfichero_prin)
@@ -141,10 +236,26 @@ get_tcontents <- function() {
 
     })
 
-    output$filepaths <- renderPrint({
-      ## parseFilePaths('/Users/', input$fichero_main)
-      #nfichero_prin
-      })
+
+    observeEvent(input$fichero_main, {
+      nfichero = shinyFileChoose(input, 'fichero_main', roots=c(roots='/Users/'), filetypes=c('Rmd'))
+      #nfichero_prin <<- "/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd"
+      #nfichero = paste("/Users",unlist(input$fichero_main[[1]]),sep="/",collapse = "/")
+
+
+      updateSelectInput(session, "IdFichero",
+                        label = VG_label_select,
+                        choices = lficheros,
+                        selected = 1
+      )
+
+    })
+
+
+    # output$filepaths <- renderPrint({
+    #   ## parseFilePaths('/Users/', input$fichero_main)
+    #   #nfichero_prin
+    #   })
 
 
     #input$TablaDT_row_last_clicked
@@ -153,7 +264,7 @@ get_tcontents <- function() {
       if (input$IdCheckAbrir) {
         cual_sel = input$TablaDT_row_last_clicked
         #func_abrir_tituloficheroRmd(tb_lr_limpio2,cual=cual_sel,dir_trab)
-        func_abrir_tituloficheroRmd(VR_Info$tb_lr_limpio2,cual=cual_sel,dir_trab)
+        func_abrir_tituloficheroRmd(VR_Info$tb_lr_limpio2,cual=cual_sel,VR_Info$dir_trab)
       }
     })
 
@@ -187,10 +298,13 @@ get_tcontents <- function() {
       DT::datatable(VR_Info$tb_lr_limpio2,  #tb_lr_limpio2,
                     selection = "single",
                     class = 'cell-border stripe compact',
+                    extensions = 'Scroller',
                     option = list(autoWidth = TRUE,pageLenght=10,
                                   lengthMenu = c(10,25,100,200),
                                   searchHighlight = TRUE,
-                                  #extensions = 'Scroller',
+                                  deferRender = TRUE,
+                                  scrollY = 200,
+                                  scroller = TRUE,
                                   language = list(search = "Filtrar:",
                                                   url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json'),
                                   initComplete = JS(
@@ -206,8 +320,8 @@ get_tcontents <- function() {
   } # final server
   #runGadget(ui, server, viewer = paneViewer(minHeight = "maximize")) # default
   #runGadget(ui, server, viewer = paneViewer()) # default
-  runGadget(ui, server, viewer = dialogViewer("Tabla Contenido", height = 600,width = 900))
-  #runGadget(ui, server, viewer = browserViewer())
+  #runGadget(ui, server, viewer = dialogViewer("Tabla Contenido", height = 600,width = 900))
+  runGadget(ui, server, viewer = browserViewer())
 }
 
 #get_tcontents()
@@ -221,3 +335,27 @@ get_tcontents <- function() {
 # - ShinyFiles:
 #        * <https://www.rdocumentation.org/packages/shinyFiles/versions/0.7.3>
 
+
+
+# library(miniUI)
+# library(shiny)
+# library(shinyFiles)
+# library(DT)
+# library(stringr)
+
+
+source("./R/funciones_tcontents.R")
+lficheros <- c("Todo")
+
+#fic02 = readLines("/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd")
+
+
+# nfichero_prin = "/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd"
+# dir_trab = dirname(nfichero_prin)
+# tb_lr_limpio2 = func_tcontenido_Rmd_todo(nfichero_prin)
+#
+# #DT::datatable(tb_lr_limpio2)
+# #func_abrir_tituloficheroRmd(tb_lr_limpio2,cual=104,dir_trab)
+# tb_lr_limpio_Fijo = tb_lr_limpio2
+# lficheros = c("Todo",sort(unique(tb_lr_limpio2$Fichero)))
+# VG_label_select <<- "Selecciona el fichero"
