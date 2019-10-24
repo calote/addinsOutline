@@ -15,18 +15,18 @@
 #' at the cursor position.
 #'
 #' @export
-run_addinsOutline_Rmd <- function() {
+run_addinsOutline_tex <- function() {
 
- tx_title = "Table of Contents of Rmd" # "Tabla de Contenido de Rmd"
- tx_filesbutton_lb = 'Select Rmd' # 'Selecciona Rmd'
- tx_filesbutton_ti = 'Select Rmd file' # 'Seleccione un fichero Rmd'
+ tx_title = "Table of Contents of LaTeX/Rnw" # "Tabla de Contenido de Rmd"
+ tx_filesbutton_lb = 'Select LaTeX/Rnw' # 'Selecciona Rmd'
+ tx_filesbutton_ti = 'Select LaTeX/Rnw file' # 'Seleccione un fichero Rmd'
  tx_checkopen = "Click: Open(T)/Non Open(F)" # "Abrir(T)/Cerrar(F)"
  tx_selectchild = "Select file" # "Selecciona el fichero"
  tx_selectchild_2 = "Non Select (non child files)" # "No Seleccionable (no contiene ficheros hijos)"
  tx_done = "Exit" # "Done"
  tx_Todo = "All"  # "Todo"
- tx_updatebutton = "Update Rmd" # "Actualizar RMD"
- tx_labelfileRmd = "File Rmd: " # "Fichero Rmd: "
+ tx_updatebutton = "Update LaTeX/Rnw" # "Actualizar RMD"
+ tx_labelfileRmd = "File LaTeX/Rnw: " # "Fichero Rmd: "
  tx_message = "Click on the row you want to go to" # "Haz clic en la fila a la que quiera ir"
  B_spanish = FALSE
  tx_colnames_DT = c("File","Title","Pos","InChunk")
@@ -64,12 +64,12 @@ run_addinsOutline_Rmd <- function() {
                      shiny::actionButton("IdActualizar",tx_updatebutton,icon = icon("refresh"))
                    )
             ),
-            column(width=1,
+            column(width=2,
                    div(style="margin-top: 35px;float:right;",
                        span(tx_labelfileRmd, style="color:red;font-size:10pt;")
                    )
             ),
-            column(width=8,offset=0,
+            column(width=7,offset=0,
                    div(style="margin-top: 35px;",
                        #verbatimTextOutput('rawInputValue')
                        span(textOutput('rawInputValue'), style="color:blue")
@@ -96,6 +96,9 @@ run_addinsOutline_Rmd <- function() {
     Ini_nfichero_prin = contexto$path
     #browser()
     #Ini_nfichero_prin = "/Users/calvo/Downloads/addinsOutline/DESCRIPTION"
+    #Ini_nfichero_prin = "/Users/calvo/Downloads/FESTAD/FESTADRMD/asigFEPR_11_ImportarExportarDatos.tex"
+    #Ini_nfichero_prin = "/Users/calvo/Downloads/addinsOutline/prueba01.tex"
+    #Ini_nfichero_prin = "/Users/calvo/Downloads/addinsOutline/principal.tex"
     if (file.exists(Ini_nfichero_prin)) {
       Ini_dir_trab = dirname(Ini_nfichero_prin)
       Ini_tb_lr_limpio2 <- func_tcontenido_Rmd_todo(Ini_nfichero_prin)
@@ -117,8 +120,9 @@ run_addinsOutline_Rmd <- function() {
     } else {
       #browser()
       #Ini_nfichero_prin = "/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd"
-      Ini_nfichero_prin = "/nofile.Rmd"
+      Ini_nfichero_prin = "/nofile.tex"
       #Ini_nfichero_prin = "/Users/calvo/Downloads/addinsOutline/NAMESPACE"
+
       #browser()
       if (file.exists(Ini_nfichero_prin)) {
         Ini_dir_trab = dirname(Ini_nfichero_prin)
@@ -218,7 +222,7 @@ run_addinsOutline_Rmd <- function() {
 
 
     observeEvent(input$fichero_main, {
-      nfichero = shinyFileChoose(input, 'fichero_main', roots=c(roots='/Users/'), filetypes=c('Rmd'))
+      nfichero = shinyFileChoose(input, 'fichero_main', roots=c(roots='/Users/'), filetypes=c('tex','Rnw'))
 
       updateSelectInput(session, "IdFichero",
                         label = VG_label_select,
@@ -303,7 +307,7 @@ run_addinsOutline_Rmd <- function() {
 
 #get_tcontents()
 
-source("./R/functions_tcontents.R")
+source("./R/functions_tcontents_tex.R")
 tx_Todo = "All"  # "Todo"
 lficheros <- c(tx_Todo)
 

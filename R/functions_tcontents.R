@@ -2,6 +2,8 @@ library(stringr)
 library(dplyr)
 library(tidyr)
 
+file_ini = "addinsOutline_ini.txt"
+
 func_tcontenido_Rmd = function(ficheroRmd_prin) {
   fic02 = readLines(ficheroRmd_prin,warn = FALSE)
   lrmd = str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
@@ -11,8 +13,9 @@ func_tcontenido_Rmd = function(ficheroRmd_prin) {
     return(NULL)
   }
 
+  crmd2 = c(basename(ficheroRmd_prin),crmd2)
+
   lista_res = vector("list",length(crmd2))
-  #browser()
   for (i in 1:length(crmd2)) {
     lista_parcial = list()
     ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
@@ -22,13 +25,11 @@ func_tcontenido_Rmd = function(ficheroRmd_prin) {
     lt3 = str_which(fic01,"^### ")
     lt4 = str_which(fic01,"^#### ")
     lt5 = str_which(fic01,"^##### ")
-    #fic01[27]
     lt = c(lt1,lt2,lt3,lt4,lt5)
     titulos_posiciones = sort(lt)
     titulos = fic01[titulos_posiciones]
     Inchunk = c(rep(FALSE,length(titulos)))
-    nfic02 = paste0(dirname(ficheroRmd_prin),"/","addinsOutline_ini.txt")
-    #nfic02 = "addinsOutline_ini.txt"
+    nfic02 = paste0(dirname(ficheroRmd_prin),"/",file_ini)
     if (file.exists(nfic02)) {
       fic02 = readLines(nfic02,warn=FALSE)
       ltg_all = vector()
@@ -54,13 +55,10 @@ func_tcontenido_Rmd = function(ficheroRmd_prin) {
                 lchunk_all = c(lchunk_all,rep(FALSE,length(ltg)))
               }
             }
-            #stringr::str_extract(s_si[1],"\ref{[:graph:]+}")
-            #stringr::str_extract(s_si[1],"\\\\ref\\{([:alnum:]*)\\}")
           }
         }
       }
       if (length(ltg_all)>0) {
-        #browser()
         nll = length(titulos_posiciones)
         tt1 = tibble(
           titulos_posiciones = c(titulos_posiciones,ltg_all),
@@ -89,7 +87,6 @@ func_tcontenido_Rmd_no_prin = function(ficheroRmd) {
     i = 1
     lista_res = vector("list",1)
     lista_parcial = list()
-    #ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
     ficRmd = ficheroRmd
     fic01 = readLines(ficRmd,warn = FALSE)
     lt1 = str_which(fic01,"^# ")
@@ -101,8 +98,7 @@ func_tcontenido_Rmd_no_prin = function(ficheroRmd) {
     titulos_posiciones = sort(lt)
     titulos = fic01[titulos_posiciones]
     Inchunk = c(rep(FALSE,length(titulos)))
-    nfic02 = paste0(dirname(ficheroRmd),"/","addinsOutline_ini.txt")
-    #nfic02 = "addinsOutline_ini.txt"
+    nfic02 = paste0(dirname(ficheroRmd),"/",file_ini)
     if (file.exists(nfic02)) {
       fic02 = readLines(nfic02,warn=FALSE)
       ltg_all = vector()
@@ -128,13 +124,10 @@ func_tcontenido_Rmd_no_prin = function(ficheroRmd) {
                 lchunk_all = c(lchunk_all,rep(FALSE,length(ltg)))
               }
             }
-            #stringr::str_extract(s_si[1],"\ref{[:graph:]+}")
-            #stringr::str_extract(s_si[1],"\\\\ref\\{([:alnum:]*)\\}")
           }
         }
       }
       if (length(ltg_all)>0) {
-        #browser()
         nll = length(titulos_posiciones)
         tt1 = tibble(
           titulos_posiciones = c(titulos_posiciones,ltg_all),
@@ -147,7 +140,6 @@ func_tcontenido_Rmd_no_prin = function(ficheroRmd) {
         Inchunk = tt1$inchunk
       }
     }
-    #fic01[27]
     lista_parcial$ficheroRmd_nb = ficRmd
     lista_parcial$ficheroRmd_pathnb = ficRmd
     lista_parcial$titulos_posiciones = titulos_posiciones
@@ -183,7 +175,6 @@ func_tcontenido_Rmd_tb = function(lr) {
 }
 
 func_abrir_tituloficheroRmd = function(tb_lr,cual,dir_trabajo) {
-  #browser()
   fichero = paste0(dir_trabajo,"/",tb_lr$Fichero[cual])
   fila = tb_lr$PosicionFila[cual]
   rstudioapi::navigateToFile(file = fichero,
@@ -192,14 +183,12 @@ func_abrir_tituloficheroRmd = function(tb_lr,cual,dir_trabajo) {
 }
 
 func_limpiar_dentrochunk = function(ficheroRmd_prin) {
-  #browser()
   # parte 1
   fic02 = readLines(ficheroRmd_prin,warn = FALSE)
   lrmd = str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
   crmd = str_extract(fic02[lrmd],"'[:graph:]*\\.Rmd'")
   crmd2 = str_replace_all(crmd,"'","")
   lista_res = vector("list",length(crmd2))
-  #browser()
   for (i in 1:length(crmd2)) {
     lista_parcial = list()
     ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
@@ -230,7 +219,6 @@ func_limpiar_dentrochunk = function(ficheroRmd_prin) {
     }
     lbtt2 = lbtt %>%
       arrange(Filas)
-    #titulos_posiciones = sort(lt)
     titulos_posiciones = lbtt2$Filas
     titulos = fic01[titulos_posiciones]
     lista_parcial$ficheroRmd_nb = crmd2[i]
@@ -240,7 +228,6 @@ func_limpiar_dentrochunk = function(ficheroRmd_prin) {
     lista_parcial$titulos = titulos
     lista_res[[i]] = lista_parcial
   }
-  #return(lista_res)
   # parte 2
   lr = lista_res
   tt = NULL
@@ -261,7 +248,6 @@ func_limpiar_dentrochunk = function(ficheroRmd_prin) {
       tt = bind_rows(tt,t1)
     }
   }
-  #return(tt)
   return(tt)
 
 
@@ -269,15 +255,8 @@ func_limpiar_dentrochunk = function(ficheroRmd_prin) {
 
 
 func_limpiar_dentrochunk_no_prin = function(ficheroRmd_prin) {
-  #browser()
-  # parte 1
-  # fic02 = readLines(ficheroRmd_prin,warn = FALSE)
-  # lrmd = str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
-  # crmd = str_extract(fic02[lrmd],"'[:graph:]*\\.Rmd'")
-  # crmd2 = str_replace_all(crmd,"'","")
   crmd2 = basename(ficheroRmd_prin)
   lista_res = vector("list",length(crmd2))
-  #browser()
   for (i in 1:length(crmd2)) {
     lista_parcial = list()
     ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
@@ -308,7 +287,6 @@ func_limpiar_dentrochunk_no_prin = function(ficheroRmd_prin) {
     }
     lbtt2 = lbtt %>%
       arrange(Filas)
-    #titulos_posiciones = sort(lt)
     titulos_posiciones = lbtt2$Filas
     titulos = fic01[titulos_posiciones]
     lista_parcial$ficheroRmd_nb = crmd2[i]
@@ -318,7 +296,6 @@ func_limpiar_dentrochunk_no_prin = function(ficheroRmd_prin) {
     lista_parcial$titulos = titulos
     lista_res[[i]] = lista_parcial
   }
-  #return(lista_res)
   # parte 2
   lr = lista_res
   tt = NULL
@@ -339,29 +316,17 @@ func_limpiar_dentrochunk_no_prin = function(ficheroRmd_prin) {
       tt = bind_rows(tt,t1)
     }
   }
-  #return(tt)
   return(tt)
 
 
 }
 
 
-# nfichero_prin = "/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd"
-# dir_trab = dirname(nfichero_prin)
-# lr = func_tcontenido_Rmd(nfichero_prin)
-# tb_lr = func_tcontenido_Rmd_tb(lr)
-# tb_lr2 = tb_lr %>%
-#   filter(!str_detect(Titulos,"salida_"))
-# func_abrir_tituloficheroRmd(tb_lr2,cual=78,dir_trab)
-# DT::datatable(tb_lr2)
-# tb_limp = func_limpiar_dentrochunk(nfichero_prin)
-# func_abrir_tituloficheroRmd(tb_limp,cual=3,dir_trab)
 
 
 func_limpiar_mejorado = function(tb_lr,tb_limp) {
   tb_lr_limpio = tb_lr
   tb_lr_limpio$borrar = FALSE
-  #browser()
   for (i in 1:nrow(tb_lr)) {
     fila = tb_lr$PosicionFila[i]
     fichero = tb_lr$Fichero[i]
@@ -369,7 +334,6 @@ func_limpiar_mejorado = function(tb_lr,tb_limp) {
     Bsi1 = F
     Bsisi2 = F
     j = 1
-    #browser()
     while (j <= nrow(tb_limp)) {
       fichero2 = tb_limp$Fichero[j]
       if (fichero==fichero2) {
@@ -407,7 +371,6 @@ func_limpiar_mejorado = function(tb_lr,tb_limp) {
 
 
 func_tcontenido_Rmd_todo = function(nfichero_prin) {
-  #browser()
   lr = func_tcontenido_Rmd(nfichero_prin)
   if (is.null(lr)) {
     return(NULL)
@@ -415,7 +378,6 @@ func_tcontenido_Rmd_todo = function(nfichero_prin) {
   tb_lr = func_tcontenido_Rmd_tb(lr)
   tb_limp = func_limpiar_dentrochunk(nfichero_prin)
   tb_lr_limpio2 = func_limpiar_mejorado(tb_lr,tb_limp)
-  #func_abrir_tituloficheroRmd(tb_limp,cual=3,dir_trab)
   return(tb_lr_limpio2)
 
 }
@@ -423,28 +385,25 @@ func_tcontenido_Rmd_todo = function(nfichero_prin) {
 
 func_tcontenido_Rmd_todo_no_prin = function(nfichero_prin) {
 
-  #lr = func_tcontenido_Rmd(nfichero_prin)
-  #browser()
   lr = func_tcontenido_Rmd_no_prin(nfichero_prin)
   tb_lr = func_tcontenido_Rmd_tb(lr)
-  tb_lr$Fichero = basename(tb_lr$Fichero)
-  #tb_limp = func_limpiar_dentrochunk(nfichero_prin)
-  tb_limp = func_limpiar_dentrochunk_no_prin(nfichero_prin)
-  tb_limp$Fichero = basename(tb_limp$Fichero)
-  tb_lr_limpio2 = func_limpiar_mejorado(tb_lr,tb_limp)
-  #func_abrir_tituloficheroRmd(tb_limp,cual=3,dir_trab)
-  tb_lr_limpio2$Fichero = basename(tb_lr_limpio2$Fichero)
+  if (is.null(tb_lr)) {
+    tb_lr_limpio2 = tibble::tibble(
+      Fichero = basename(nfichero_prin),
+      Titulos = nfichero_prin,
+      PosicionFila = 1,
+      Inchunk = FALSE
+    )
+  } else {
+    tb_lr$Fichero = basename(tb_lr$Fichero)
+    tb_limp = func_limpiar_dentrochunk_no_prin(nfichero_prin)
+    tb_limp$Fichero = basename(tb_limp$Fichero)
+    tb_lr_limpio2 = func_limpiar_mejorado(tb_lr,tb_limp)
+    tb_lr_limpio2$Fichero = basename(tb_lr_limpio2$Fichero)
+  }
   return(tb_lr_limpio2)
 
 }
 
 
 
-
-
-# tb_lr_limpio2 = func_limpiar_mejorado(tb_lr,tb_limp)
-# DT::datatable(tb_lr_limpio2)
-# func_abrir_tituloficheroRmd(tb_lr_limpio2,cual=104,dir_trab)
-
-#nfichero_prin = "/Users/calvo/Downloads/FESTAD/FESTADRMD/asigFEPR_13_ProgramaFunciones.Rmd"
-#func_tcontenido_Rmd_todo_no_prin(nfichero_prin)

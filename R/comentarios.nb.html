@@ -1786,10 +1786,78 @@ Listening on http://127.0.0.1:4480</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+</div>
+<div id="código-utilizado" class="section level1">
+<h1>Código utilizado</h1>
+<pre class="r"><code>
+formatR tidyr
+
+DESCRIPTION
+tidyr (&gt;= 1.0)
+
+
+library(miniUI)
+library(shiny)
+library(shinyFiles)
+library(DT)
+library(stringr)
+
+# Referencias curiosas:
+
+# - DT:
+#       * &lt;https://laustep.github.io/stlahblog/posts/PlotDatatableColumns.html&gt;
+
+# - ShinyFiles:
+#        * &lt;https://www.rdocumentation.org/packages/shinyFiles/versions/0.7.3&gt;
+
+
+#fic02 = readLines(&quot;/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd&quot;)
+
+
+# nfichero_prin = &quot;/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd&quot;
+# dir_trab = dirname(nfichero_prin)
+# tb_lr_limpio2 = func_tcontenido_Rmd_todo(nfichero_prin)
+#
+# #DT::datatable(tb_lr_limpio2)
+# #func_abrir_tituloficheroRmd(tb_lr_limpio2,cual=104,dir_trab)
+# tb_lr_limpio_Fijo = tb_lr_limpio2
+# lficheros = c(&quot;Todo&quot;,sort(unique(tb_lr_limpio2$Fichero)))
+# VG_label_select &lt;&lt;- &quot;Selecciona el fichero&quot;
+
+
+
+
+
+
+# nfichero_prin = &quot;/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd&quot;
+# dir_trab = dirname(nfichero_prin)
+# lr = func_tcontenido_Rmd(nfichero_prin)
+# tb_lr = func_tcontenido_Rmd_tb(lr)
+# tb_lr2 = tb_lr %&gt;%
+#   filter(!str_detect(Titulos,&quot;salida_&quot;))
+# func_abrir_tituloficheroRmd(tb_lr2,cual=78,dir_trab)
+# DT::datatable(tb_lr2)
+# tb_limp = func_limpiar_dentrochunk(nfichero_prin)
+# func_abrir_tituloficheroRmd(tb_limp,cual=3,dir_trab)
+
+
+
+
+
+# tb_lr_limpio2 = func_limpiar_mejorado(tb_lr,tb_limp)
+# DT::datatable(tb_lr_limpio2)
+# func_abrir_tituloficheroRmd(tb_lr_limpio2,cual=104,dir_trab)
+
+#nfichero_prin = &quot;/Users/calvo/Downloads/FESTAD/FESTADRMD/asigFEPR_13_ProgramaFunciones.Rmd&quot;
+#func_tcontenido_Rmd_todo_no_prin(nfichero_prin)
+
+</code></pre>
+<p>Usa addinsOutline para mostrar la tabla de contenido completa de ficheros R Markdown (Rmd )y ficheros LaTeX/Rnw (tex), incluyendo los apartados de ficheros hijos incluidos en ellos. Usa la función run_addinsOutline_Rmd() para ficheros R Markdown y la función run_addinsOutline_tex() para ficheros LaTeX/Rnw.</p>
+<p>Use addinsOutline to display the complete table of contents of R Markdown (Rmd) and LaTeX / Rnw (tex) files, including the child file sections included in them. Use the run_addinsOutline_Rmd () function for R Markdown files and the run_addinsOutline_tex () function for LaTeX / Rnw files.</p>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiTGVlbWUiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiMgR3XDrWEgY29uIGVsIHBhcXVldGUgYWRkbmV4YW1wbGVzCgotIFtSU3R1ZGlvIGFkZGluc10oaHR0cHM6Ly9yc3R1ZGlvLmdpdGh1Yi5pby9yc3R1ZGlvYWRkaW5zLykKLSBbR2l0aHViIGFkZGluZXhhbXBsZXNdKGh0dHBzOi8vZ2l0aHViLmNvbS9yc3R1ZGlvL2FkZGluZXhhbXBsZXMpCgpgYGB7ciBldmFsPUZBTFNFfQpkZXZ0b29sczo6aW5zdGFsbF9naXRodWIoInJzdHVkaW8vYWRkaW5leGFtcGxlcyIsIHR5cGUgPSAic291cmNlIikKYGBgCgojIEluZm9ybWFjacOzbiBzb2JyZSBEVAoKLSBbRFRdKGh0dHBzOi8vcnN0dWRpby5naXRodWIuaW8vRFQvKQogICAgCiAgICAqIFtTY3JvbGxlcl0oaHR0cHM6Ly9yc3R1ZGlvLmdpdGh1Yi5pby9EVC9leHRlbnNpb25zLmh0bWwpCgoKCmBgYHtyfQpnZXRfdGNvbnRlbnRzKCkKYGBgCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiTGVlbWUiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiMgR3XDrWEgY29uIGVsIHBhcXVldGUgYWRkbmV4YW1wbGVzCgotIFtSU3R1ZGlvIGFkZGluc10oaHR0cHM6Ly9yc3R1ZGlvLmdpdGh1Yi5pby9yc3R1ZGlvYWRkaW5zLykKLSBbR2l0aHViIGFkZGluZXhhbXBsZXNdKGh0dHBzOi8vZ2l0aHViLmNvbS9yc3R1ZGlvL2FkZGluZXhhbXBsZXMpCgpgYGB7ciBldmFsPUZBTFNFfQpkZXZ0b29sczo6aW5zdGFsbF9naXRodWIoInJzdHVkaW8vYWRkaW5leGFtcGxlcyIsIHR5cGUgPSAic291cmNlIikKYGBgCgojIEluZm9ybWFjacOzbiBzb2JyZSBEVAoKLSBbRFRdKGh0dHBzOi8vcnN0dWRpby5naXRodWIuaW8vRFQvKQogICAgCiAgICAqIFtTY3JvbGxlcl0oaHR0cHM6Ly9yc3R1ZGlvLmdpdGh1Yi5pby9EVC9leHRlbnNpb25zLmh0bWwpCgoKCmBgYHtyfQpnZXRfdGNvbnRlbnRzKCkKYGBgCgoKIyBDw7NkaWdvIHV0aWxpemFkbwoKYGBgcgoKZm9ybWF0UiB0aWR5cgoKREVTQ1JJUFRJT04KdGlkeXIgKD49IDEuMCkKCgpsaWJyYXJ5KG1pbmlVSSkKbGlicmFyeShzaGlueSkKbGlicmFyeShzaGlueUZpbGVzKQpsaWJyYXJ5KERUKQpsaWJyYXJ5KHN0cmluZ3IpCgojIFJlZmVyZW5jaWFzIGN1cmlvc2FzOgoKIyAtIERUOgojICAgICAgICogPGh0dHBzOi8vbGF1c3RlcC5naXRodWIuaW8vc3RsYWhibG9nL3Bvc3RzL1Bsb3REYXRhdGFibGVDb2x1bW5zLmh0bWw+CgojIC0gU2hpbnlGaWxlczoKIyAgICAgICAgKiA8aHR0cHM6Ly93d3cucmRvY3VtZW50YXRpb24ub3JnL3BhY2thZ2VzL3NoaW55RmlsZXMvdmVyc2lvbnMvMC43LjM+CgoKI2ZpYzAyID0gcmVhZExpbmVzKCIvVXNlcnMvY2Fsdm8vRG93bmxvYWRzL0ZFU1RBRC9GRVNUQURSTUQvRkVTVEFEbWFpbi5SbWQiKQoKCiMgbmZpY2hlcm9fcHJpbiA9ICIvVXNlcnMvY2Fsdm8vRG93bmxvYWRzL0ZFU1RBRC9GRVNUQURSTUQvRkVTVEFEbWFpbi5SbWQiCiMgZGlyX3RyYWIgPSBkaXJuYW1lKG5maWNoZXJvX3ByaW4pCiMgdGJfbHJfbGltcGlvMiA9IGZ1bmNfdGNvbnRlbmlkb19SbWRfdG9kbyhuZmljaGVyb19wcmluKQojCiMgI0RUOjpkYXRhdGFibGUodGJfbHJfbGltcGlvMikKIyAjZnVuY19hYnJpcl90aXR1bG9maWNoZXJvUm1kKHRiX2xyX2xpbXBpbzIsY3VhbD0xMDQsZGlyX3RyYWIpCiMgdGJfbHJfbGltcGlvX0Zpam8gPSB0Yl9scl9saW1waW8yCiMgbGZpY2hlcm9zID0gYygiVG9kbyIsc29ydCh1bmlxdWUodGJfbHJfbGltcGlvMiRGaWNoZXJvKSkpCiMgVkdfbGFiZWxfc2VsZWN0IDw8LSAiU2VsZWNjaW9uYSBlbCBmaWNoZXJvIgoKCgoKCgojIG5maWNoZXJvX3ByaW4gPSAiL1VzZXJzL2NhbHZvL0Rvd25sb2Fkcy9GRVNUQUQvRkVTVEFEUk1EL0ZFU1RBRG1haW4uUm1kIgojIGRpcl90cmFiID0gZGlybmFtZShuZmljaGVyb19wcmluKQojIGxyID0gZnVuY190Y29udGVuaWRvX1JtZChuZmljaGVyb19wcmluKQojIHRiX2xyID0gZnVuY190Y29udGVuaWRvX1JtZF90YihscikKIyB0Yl9scjIgPSB0Yl9sciAlPiUKIyAgIGZpbHRlcighc3RyX2RldGVjdChUaXR1bG9zLCJzYWxpZGFfIikpCiMgZnVuY19hYnJpcl90aXR1bG9maWNoZXJvUm1kKHRiX2xyMixjdWFsPTc4LGRpcl90cmFiKQojIERUOjpkYXRhdGFibGUodGJfbHIyKQojIHRiX2xpbXAgPSBmdW5jX2xpbXBpYXJfZGVudHJvY2h1bmsobmZpY2hlcm9fcHJpbikKIyBmdW5jX2FicmlyX3RpdHVsb2ZpY2hlcm9SbWQodGJfbGltcCxjdWFsPTMsZGlyX3RyYWIpCgoKCgoKIyB0Yl9scl9saW1waW8yID0gZnVuY19saW1waWFyX21lam9yYWRvKHRiX2xyLHRiX2xpbXApCiMgRFQ6OmRhdGF0YWJsZSh0Yl9scl9saW1waW8yKQojIGZ1bmNfYWJyaXJfdGl0dWxvZmljaGVyb1JtZCh0Yl9scl9saW1waW8yLGN1YWw9MTA0LGRpcl90cmFiKQoKI25maWNoZXJvX3ByaW4gPSAiL1VzZXJzL2NhbHZvL0Rvd25sb2Fkcy9GRVNUQUQvRkVTVEFEUk1EL2FzaWdGRVBSXzEzX1Byb2dyYW1hRnVuY2lvbmVzLlJtZCIKI2Z1bmNfdGNvbnRlbmlkb19SbWRfdG9kb19ub19wcmluKG5maWNoZXJvX3ByaW4pCgoKYGBgCgoKClVzYSBhZGRpbnNPdXRsaW5lIHBhcmEgbW9zdHJhciBsYSB0YWJsYSBkZSBjb250ZW5pZG8gY29tcGxldGEgZGUgZmljaGVyb3MgUiBNYXJrZG93biAoUm1kICl5IGZpY2hlcm9zIExhVGVYL1JudyAodGV4KSwgaW5jbHV5ZW5kbyBsb3MgYXBhcnRhZG9zIGRlIGZpY2hlcm9zIGhpam9zIGluY2x1aWRvcyBlbiBlbGxvcy4gVXNhIGxhIGZ1bmNpw7NuIHJ1bl9hZGRpbnNPdXRsaW5lX1JtZCgpIHBhcmEgZmljaGVyb3MgUiBNYXJrZG93biB5IGxhIGZ1bmNpw7NuIHJ1bl9hZGRpbnNPdXRsaW5lX3RleCgpIHBhcmEgZmljaGVyb3MgTGFUZVgvUm53LgoKVXNlIGFkZGluc091dGxpbmUgdG8gZGlzcGxheSB0aGUgY29tcGxldGUgdGFibGUgb2YgY29udGVudHMgb2YgUiBNYXJrZG93biAoUm1kKSBhbmQgTGFUZVggLyBSbncgKHRleCkgZmlsZXMsIGluY2x1ZGluZyB0aGUgY2hpbGQgZmlsZSBzZWN0aW9ucyBpbmNsdWRlZCBpbiB0aGVtLiBVc2UgdGhlIHJ1bl9hZGRpbnNPdXRsaW5lX1JtZCAoKSBmdW5jdGlvbiBmb3IgUiBNYXJrZG93biBmaWxlcyBhbmQgdGhlIHJ1bl9hZGRpbnNPdXRsaW5lX3RleCAoKSBmdW5jdGlvbiBmb3IgTGFUZVggLyBSbncgZmlsZXMuCg==</div>
 
 
 

@@ -24,3 +24,77 @@ devtools::install_github("rstudio/addinexamples", type = "source")
 get_tcontents()
 ```
 
+
+# Código utilizado
+
+```r
+
+formatR tidyr
+
+DESCRIPTION
+tidyr (>= 1.0)
+
+
+library(miniUI)
+library(shiny)
+library(shinyFiles)
+library(DT)
+library(stringr)
+
+# Referencias curiosas:
+
+# - DT:
+#       * <https://laustep.github.io/stlahblog/posts/PlotDatatableColumns.html>
+
+# - ShinyFiles:
+#        * <https://www.rdocumentation.org/packages/shinyFiles/versions/0.7.3>
+
+
+#fic02 = readLines("/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd")
+
+
+# nfichero_prin = "/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd"
+# dir_trab = dirname(nfichero_prin)
+# tb_lr_limpio2 = func_tcontenido_Rmd_todo(nfichero_prin)
+#
+# #DT::datatable(tb_lr_limpio2)
+# #func_abrir_tituloficheroRmd(tb_lr_limpio2,cual=104,dir_trab)
+# tb_lr_limpio_Fijo = tb_lr_limpio2
+# lficheros = c("Todo",sort(unique(tb_lr_limpio2$Fichero)))
+# VG_label_select <<- "Selecciona el fichero"
+
+
+
+
+
+
+# nfichero_prin = "/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd"
+# dir_trab = dirname(nfichero_prin)
+# lr = func_tcontenido_Rmd(nfichero_prin)
+# tb_lr = func_tcontenido_Rmd_tb(lr)
+# tb_lr2 = tb_lr %>%
+#   filter(!str_detect(Titulos,"salida_"))
+# func_abrir_tituloficheroRmd(tb_lr2,cual=78,dir_trab)
+# DT::datatable(tb_lr2)
+# tb_limp = func_limpiar_dentrochunk(nfichero_prin)
+# func_abrir_tituloficheroRmd(tb_limp,cual=3,dir_trab)
+
+
+
+
+
+# tb_lr_limpio2 = func_limpiar_mejorado(tb_lr,tb_limp)
+# DT::datatable(tb_lr_limpio2)
+# func_abrir_tituloficheroRmd(tb_lr_limpio2,cual=104,dir_trab)
+
+#nfichero_prin = "/Users/calvo/Downloads/FESTAD/FESTADRMD/asigFEPR_13_ProgramaFunciones.Rmd"
+#func_tcontenido_Rmd_todo_no_prin(nfichero_prin)
+
+
+```
+
+
+
+Usa addinsOutline para mostrar la tabla de contenido completa de ficheros R Markdown (Rmd )y ficheros LaTeX/Rnw (tex), incluyendo los apartados de ficheros hijos incluidos en ellos. Usa la función run_addinsOutline_Rmd() para ficheros R Markdown y la función run_addinsOutline_tex() para ficheros LaTeX/Rnw.
+
+Use addinsOutline to display the complete table of contents of R Markdown (Rmd) and LaTeX / Rnw (tex) files, including the child file sections included in them. Use the run_addinsOutline_Rmd () function for R Markdown files and the run_addinsOutline_tex () function for LaTeX / Rnw files.

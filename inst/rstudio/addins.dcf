@@ -1,4 +1,9 @@
 Name: Show Outline R Markdown
 Description: Displays Outline of an R Markdown file with and without child files
-Binding: get_tcontents
+Binding: run_addinsOutline_Rmd
+Interactive: true
+
+Name: Show Outline Rnw and/or LaTeX
+Description: Displays Outline of an Rnw and/or LaTeX file with and without child files
+Binding: run_addinsOutline_tex
 Interactive: true

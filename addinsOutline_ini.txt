@@ -3,17 +3,10 @@ ref;;rmdno;;\\ref\{([:alnum:]*)\};;
 label;;rmd;;\\label\{([:graph:]*)\};;
 Includegraphics;;rmd;;include_graphics\(([:graph:]*)\);;inchunk
 knitr-kable-tabla;;rmd;;kable\(([:graph:]*)\);;inchunk
-Título 1;;tex;;\\section{
-Título 1;;tex;;\\section\[
-Título 2;;tex;;\\subsection{
-Título 2;;tex;;\\subsection\[
-Título 3;;tex;;\\subsubsection{
-Título 3;;tex;;\\subsubsection\[
-Capítulo;;tex;;\\chapter{
-Capítulo;;tex;;\\chapter\[
-begin-thm;;tex;;\\begin{thm}
-begin-proof;;tex;;\\begin{proof}
-TODO;;tex;;%TODO%
-Problema;;tex;;\\question
-Problema;;tex;;\\PRO
-frametitle-Beamer;;tex;;\\frametitle{
+label;;texno;;\\label\{([:graph:]*)\};;
+begin-thm;;texno;;\\begin{thm};;
+begin-proof;;texno;;\\begin{proof};;
+TODO;;texno;;%TODO%;;
+Problema;;texno;;\\question;;
+Problema;;texno;;\\PRO;;
+frametitle-Beamer;;texno;;\\frametitle{;;
