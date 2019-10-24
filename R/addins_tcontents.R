@@ -94,8 +94,7 @@ run_addinsOutline_Rmd <- function() {
     contexto <- rstudioapi::getActiveDocumentContext()
     texto_contexto <- contexto$contents
     Ini_nfichero_prin = contexto$path
-    #browser()
-    #Ini_nfichero_prin = "/Users/calvo/Downloads/addinsOutline/DESCRIPTION"
+
     if (file.exists(Ini_nfichero_prin)) {
       Ini_dir_trab = dirname(Ini_nfichero_prin)
       Ini_tb_lr_limpio2 <- func_tcontenido_Rmd_todo(Ini_nfichero_prin)
@@ -110,16 +109,19 @@ run_addinsOutline_Rmd <- function() {
         tb_lr_limpio_Fijo = Ini_tb_lr_limpio2
         lficheros <- c(tx_Todo,sort(unique(Ini_tb_lr_limpio2$Fichero)))
         VG_label_select <- tx_selectchild
+
+        updateSelectInput(session, "IdFichero",
+                          label = VG_label_select,
+                          choices = lficheros,
+                          selected = lficheros[1]
+        )
+
       }
 
 
 
     } else {
-      #browser()
-      #Ini_nfichero_prin = "/Users/calvo/Downloads/FESTAD/FESTADRMD/FESTADmain.Rmd"
       Ini_nfichero_prin = "/nofile.Rmd"
-      #Ini_nfichero_prin = "/Users/calvo/Downloads/addinsOutline/NAMESPACE"
-      #browser()
       if (file.exists(Ini_nfichero_prin)) {
         Ini_dir_trab = dirname(Ini_nfichero_prin)
         Ini_tb_lr_limpio2 = func_tcontenido_Rmd_todo(Ini_nfichero_prin)
@@ -185,11 +187,11 @@ run_addinsOutline_Rmd <- function() {
         listado = c("/Users", unlist(input$fichero_main[[1]])[-1] )
         nfichero = paste(listado,sep="",collapse = "/")
         if (file.exists(nfichero)) {
-
           isolate({
             VR_Info$nfichero_prin <- nfichero
             VR_Info$dir_trab <- dirname(VR_Info$nfichero_prin)
             VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo(VR_Info$nfichero_prin)
+            #cat(file=stderr(), "Paso 1", nfichero, "bins", "\n")
             if (is.null(VR_Info$tb_lr_limpio2)) {
               VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo_no_prin(VR_Info$nfichero_prin)
               tb_lr_limpio_Fijo <<- VR_Info$tb_lr_limpio2
@@ -223,7 +225,7 @@ run_addinsOutline_Rmd <- function() {
       updateSelectInput(session, "IdFichero",
                         label = VG_label_select,
                         choices = lficheros,
-                        selected = 1
+                        selected = lficheros[1]
       )
 
     })

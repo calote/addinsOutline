@@ -29,7 +29,8 @@ run_addinsOutline_tex <- function() {
  tx_labelfileRmd = "File LaTeX/Rnw: " # "Fichero Rmd: "
  tx_message = "Click on the row you want to go to" # "Haz clic en la fila a la que quiera ir"
  B_spanish = FALSE
- tx_colnames_DT = c("File","Title","Pos","InChunk")
+ #tx_colnames_DT = c("File","Title","Pos","InChunk")
+ tx_colnames_DT = c("File","Title","Pos")
 
   ui <- miniPage(
     gadgetTitleBar(tx_title,
@@ -101,9 +102,9 @@ run_addinsOutline_tex <- function() {
     #Ini_nfichero_prin = "/Users/calvo/Downloads/addinsOutline/principal.tex"
     if (file.exists(Ini_nfichero_prin)) {
       Ini_dir_trab = dirname(Ini_nfichero_prin)
-      Ini_tb_lr_limpio2 <- func_tcontenido_Rmd_todo(Ini_nfichero_prin)
+      Ini_tb_lr_limpio2 <- func_tcontenido_Rmd_todo_tex(Ini_nfichero_prin)
       if (is.null(Ini_tb_lr_limpio2)) {
-        Ini_tb_lr_limpio2 <- func_tcontenido_Rmd_todo_no_prin(Ini_nfichero_prin)
+        Ini_tb_lr_limpio2 <- func_tcontenido_Rmd_todo_no_prin_tex(Ini_nfichero_prin)
         if (!is.null(Ini_tb_lr_limpio2)) {
           tb_lr_limpio_Fijo = Ini_tb_lr_limpio2
         }
@@ -113,6 +114,13 @@ run_addinsOutline_tex <- function() {
         tb_lr_limpio_Fijo = Ini_tb_lr_limpio2
         lficheros <- c(tx_Todo,sort(unique(Ini_tb_lr_limpio2$Fichero)))
         VG_label_select <- tx_selectchild
+
+        updateSelectInput(session, "IdFichero",
+                          label = VG_label_select,
+                          choices = lficheros,
+                          selected = lficheros[1]
+        )
+
       }
 
 
@@ -126,7 +134,7 @@ run_addinsOutline_tex <- function() {
       #browser()
       if (file.exists(Ini_nfichero_prin)) {
         Ini_dir_trab = dirname(Ini_nfichero_prin)
-        Ini_tb_lr_limpio2 = func_tcontenido_Rmd_todo(Ini_nfichero_prin)
+        Ini_tb_lr_limpio2 = func_tcontenido_Rmd_todo_tex(Ini_nfichero_prin)
         if (is.null(Ini_tb_lr_limpio2)) {
           Ini_tb_lr_limpio2 = tibble::tibble(
             Fichero = basename(Ini_nfichero_prin),
@@ -193,9 +201,9 @@ run_addinsOutline_tex <- function() {
           isolate({
             VR_Info$nfichero_prin <- nfichero
             VR_Info$dir_trab <- dirname(VR_Info$nfichero_prin)
-            VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo(VR_Info$nfichero_prin)
+            VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo_tex(VR_Info$nfichero_prin)
             if (is.null(VR_Info$tb_lr_limpio2)) {
-              VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo_no_prin(VR_Info$nfichero_prin)
+              VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo_no_prin_tex(VR_Info$nfichero_prin)
               tb_lr_limpio_Fijo <<- VR_Info$tb_lr_limpio2
               lficheros <<- c(tx_Todo)
               VG_label_select <<- tx_selectchild_2
@@ -227,7 +235,7 @@ run_addinsOutline_tex <- function() {
       updateSelectInput(session, "IdFichero",
                         label = VG_label_select,
                         choices = lficheros,
-                        selected = 1
+                        selected = lficheros[1]
       )
 
     })
@@ -237,7 +245,7 @@ run_addinsOutline_tex <- function() {
     observeEvent(input$TablaDT_row_last_clicked, {
       if (input$IdCheckAbrir) {
         cual_sel = input$TablaDT_row_last_clicked
-        func_abrir_tituloficheroRmd(VR_Info$tb_lr_limpio2,cual=cual_sel,VR_Info$dir_trab)
+        func_abrir_tituloficheroRmd_tex(VR_Info$tb_lr_limpio2,cual=cual_sel,VR_Info$dir_trab)
       }
     })
 
@@ -257,7 +265,7 @@ run_addinsOutline_tex <- function() {
       s1 = input$IdFichero
       s2 = input$fichero_main
       if (B_spanish) {
-        DT::datatable(VR_Info$tb_lr_limpio2,
+        DT::datatable(VR_Info$tb_lr_limpio2[,1:3],
                       selection = "single",
                       class = 'cell-border stripe compact',
                       extensions = 'Scroller',colnames = tx_colnames_DT,
@@ -276,7 +284,7 @@ run_addinsOutline_tex <- function() {
                       )
         )
       } else {
-        DT::datatable(VR_Info$tb_lr_limpio2,
+        DT::datatable(VR_Info$tb_lr_limpio2[,1:3],
                       selection = "single",
                       class = 'cell-border stripe compact',
                       extensions = 'Scroller',colnames = tx_colnames_DT,

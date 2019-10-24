@@ -4,7 +4,7 @@ library(tidyr)
 
 file_ini = "addinsOutline_ini.txt"
 
-func_tcontenido_Rmd = function(ficheroRmd_prin) {
+func_tcontenido_Rmd_tex = function(ficheroRmd_prin) {
   fic02 = readLines(ficheroRmd_prin,warn = FALSE)
   # lrmd = str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
   # crmd = str_extract(fic02[lrmd],"'[:graph:]*\\.Rmd'")
@@ -101,7 +101,7 @@ func_tcontenido_Rmd = function(ficheroRmd_prin) {
   return(lista_res)
 }
 
-func_tcontenido_Rmd_no_prin = function(ficheroRmd) {
+func_tcontenido_Rmd_no_prin_tex = function(ficheroRmd) {
     i = 1
     lista_res = vector("list",1)
     lista_parcial = list()
@@ -175,7 +175,7 @@ func_tcontenido_Rmd_no_prin = function(ficheroRmd) {
 }
 
 
-func_tcontenido_Rmd_tb = function(lr) {
+func_tcontenido_Rmd_tb_tex = function(lr) {
   tt = NULL
   for (i in 1:length(lr)) {
     fiche = lr[[i]]$ficheroRmd_nb
@@ -199,7 +199,7 @@ func_tcontenido_Rmd_tb = function(lr) {
   return(tt)
 }
 
-func_abrir_tituloficheroRmd = function(tb_lr,cual,dir_trabajo) {
+func_abrir_tituloficheroRmd_tex = function(tb_lr,cual,dir_trabajo) {
   fichero = paste0(dir_trabajo,"/",tb_lr$Fichero[cual])
   fila = tb_lr$PosicionFila[cual]
   rstudioapi::navigateToFile(file = fichero,
@@ -207,7 +207,7 @@ func_abrir_tituloficheroRmd = function(tb_lr,cual,dir_trabajo) {
                              column = 1)
 }
 
-func_limpiar_dentrochunk = function(ficheroRmd_prin) {
+func_limpiar_dentrochunk_tex = function(ficheroRmd_prin) {
   # parte 1
   fic02 = readLines(ficheroRmd_prin,warn = FALSE)
   lrmd = str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
@@ -279,7 +279,7 @@ func_limpiar_dentrochunk = function(ficheroRmd_prin) {
 }
 
 
-func_limpiar_dentrochunk_no_prin = function(ficheroRmd_prin) {
+func_limpiar_dentrochunk_no_prin_tex = function(ficheroRmd_prin) {
   crmd2 = basename(ficheroRmd_prin)
   lista_res = vector("list",length(crmd2))
   for (i in 1:length(crmd2)) {
@@ -349,7 +349,7 @@ func_limpiar_dentrochunk_no_prin = function(ficheroRmd_prin) {
 
 
 
-func_limpiar_mejorado = function(tb_lr,tb_limp) {
+func_limpiar_mejorado_tex = function(tb_lr,tb_limp) {
   tb_lr_limpio = tb_lr
   tb_lr_limpio$borrar = FALSE
   for (i in 1:nrow(tb_lr)) {
@@ -395,12 +395,12 @@ func_limpiar_mejorado = function(tb_lr,tb_limp) {
 }
 
 
-func_tcontenido_Rmd_todo = function(nfichero_prin) {
-  lr = func_tcontenido_Rmd(nfichero_prin)
+func_tcontenido_Rmd_todo_tex = function(nfichero_prin) {
+  lr = func_tcontenido_Rmd_tex(nfichero_prin)
   if (is.null(lr)) {
     return(NULL)
   }
-  tb_lr = func_tcontenido_Rmd_tb(lr)
+  tb_lr = func_tcontenido_Rmd_tb_tex(lr)
   #tb_limp = func_limpiar_dentrochunk(nfichero_prin)
   #tb_lr_limpio2 = func_limpiar_mejorado(tb_lr,tb_limp)
   tb_lr_limpio2 = tb_lr
@@ -409,10 +409,10 @@ func_tcontenido_Rmd_todo = function(nfichero_prin) {
 }
 
 
-func_tcontenido_Rmd_todo_no_prin = function(nfichero_prin) {
+func_tcontenido_Rmd_todo_no_prin_tex = function(nfichero_prin) {
 
-  lr = func_tcontenido_Rmd_no_prin(nfichero_prin)
-  tb_lr = func_tcontenido_Rmd_tb(lr)
+  lr = func_tcontenido_Rmd_no_prin_tex(nfichero_prin)
+  tb_lr = func_tcontenido_Rmd_tb_tex(lr)
   if (is.null(tb_lr)) {
     tb_lr_limpio2 = tibble::tibble(
       Fichero = basename(nfichero_prin),
@@ -422,10 +422,11 @@ func_tcontenido_Rmd_todo_no_prin = function(nfichero_prin) {
     )
   } else {
     tb_lr$Fichero = basename(tb_lr$Fichero)
-    tb_limp = func_limpiar_dentrochunk_no_prin(nfichero_prin)
-    tb_limp$Fichero = basename(tb_limp$Fichero)
-    tb_lr_limpio2 = func_limpiar_mejorado(tb_lr,tb_limp)
-    tb_lr_limpio2$Fichero = basename(tb_lr_limpio2$Fichero)
+    #tb_limp = func_limpiar_dentrochunk_no_prin_tex(nfichero_prin)
+    #tb_limp$Fichero = basename(tb_limp$Fichero)
+    #tb_lr_limpio2 = func_limpiar_mejorado_tex(tb_lr,tb_limp)
+    #tb_lr_limpio2$Fichero = basename(tb_lr_limpio2$Fichero)
+    tb_lr_limpio2 = tb_lr
   }
   return(tb_lr_limpio2)
 

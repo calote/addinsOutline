@@ -188,6 +188,7 @@ func_limpiar_dentrochunk = function(ficheroRmd_prin) {
   lrmd = str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
   crmd = str_extract(fic02[lrmd],"'[:graph:]*\\.Rmd'")
   crmd2 = str_replace_all(crmd,"'","")
+  crmd2 = c(basename(ficheroRmd_prin),crmd2)
   lista_res = vector("list",length(crmd2))
   for (i in 1:length(crmd2)) {
     lista_parcial = list()
@@ -387,6 +388,9 @@ func_tcontenido_Rmd_todo_no_prin = function(nfichero_prin) {
 
   lr = func_tcontenido_Rmd_no_prin(nfichero_prin)
   tb_lr = func_tcontenido_Rmd_tb(lr)
+  #cat(file=stderr(), "drawing histogram with", nfichero_prin, "bins", "\n")
+  #stopApp("Adios")
+  #str(lr)
   if (is.null(tb_lr)) {
     tb_lr_limpio2 = tibble::tibble(
       Fichero = basename(nfichero_prin),
