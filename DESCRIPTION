@@ -1,7 +1,7 @@
 Package: addinsOutline
 Type: Package
-Title: Addins Displays Outline of an R Markdown file with and without child files
-Version: 0.1.3
+Title: Addins Displays Outline of an R Markdown (LaTeX/Rnw) file with and without child files
+Version: 0.1.4
 Author: Pedro L. Luque Calvo
 Maintainer: Pedro L. Luque Calvo <calvo@us.es>
 Description: Addins Displays Outline of an R Markdown file with 
@@ -9,11 +9,20 @@ Description: Addins Displays Outline of an R Markdown file with
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Depends:
+    R (>= 3.5)
 Imports:
   shiny (>= 0.13),
   miniUI (>= 0.1.1),
   rstudioapi (>= 0.5),
   shinyFiles (>= 0.7),
-  DT (>= 0.8),
   stringr (>= 1.3),
-  dplyr (>= 0.7)
+  dplyr (>= 0.7),
+  tibble,
+  yaml,
+  DT (>= 0.8)
+RoxygenNote: 6.1.1
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

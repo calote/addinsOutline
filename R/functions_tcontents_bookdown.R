@@ -5,23 +5,59 @@ globalVariables(c("%>%", "Filas", "borrar"))
 
 file_ini = "addinsOutline_ini.txt"
 
-func_tcontenido_Rmd_tex = function(ficheroRmd_prin) {
-  fic02 = readLines(ficheroRmd_prin,warn = FALSE)
-  # lrmd = str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
-  # crmd = str_extract(fic02[lrmd],"'[:graph:]*\\.Rmd'")
-  # crmd2 = str_replace_all(crmd,"'","")
-  #browser()
-  lrmd = stringr::str_which(fic02,"^\\\\input\\{([:graph:]*)\\}")
-  crmd = stringr::str_extract(fic02[lrmd],"\\{[:graph:]*\\.tex\\}")
-  crmd2 = stringr::str_replace_all(crmd,fixed("{"),"")
-  crmd2 = stringr::str_replace_all(crmd2,fixed("}"),"")
+func_unique_bookdown = function(x) {
+  #return(unique(x))
+  return(x[!duplicated(x)])
+}
 
-  lrmda = stringr::str_which(fic02,"^\\\\include\\{([:graph:]*)\\}")
-  crmda = stringr::str_extract(fic02[lrmda],"\\{[:graph:]*\\.tex\\}")
-  crmd2a = stringr::str_replace_all(crmda,fixed("{"),"")
-  crmd2a = stringr::str_replace_all(crmd2a,fixed("}"),"")
+func_extract_files_bookdown = function(ficheroRmd_prin) {
 
-  crmd2 = c(crmd2,crmd2a)
+  n_ficheroRmd_prin = basename(ficheroRmd_prin)
+  if (n_ficheroRmd_prin=="_bookdown.yml") {
+    inf1 = yaml::read_yaml(ficheroRmd_prin)
+    crmd2 = inf1[["rmd_files"]]
+
+    if (is.null(crmd2)) {
+      npr = inf1[["book_filename"]]
+      if (!is.null(npr)) {
+        ficRmd2 = paste0(dirname(ficheroRmd_prin),"/",npr)
+      } else {
+        ficRmd2 = paste0(dirname(ficheroRmd_prin),"/","index.Rmd")
+      }
+      if (file.exists(ficRmd2)) {
+        inf1 = rmarkdown::yaml_front_matter(input=ficRmd2)
+        crmd2 = inf1[["rmd_files"]]
+        if (is.null(crmd2)) {
+          dir1 = dirname(ficheroRmd_prin)
+          lfRmd = list.files(path=dir1,pattern=".Rmd")
+          crmd2 = c("index.Rmd",setdiff(lfRmd,"index.Rmd"))
+        } else if (class(crmd2)=="list") {
+          crmd2 = crmd2[[1]]  # el primero: "html", "latex", "word"
+        }
+      } else {
+        return(NULL)
+      }
+    }
+  }
+
+  if (n_ficheroRmd_prin=="index.Rmd") {
+    inf1 = rmarkdown::yaml_front_matter(input=ficheroRmd_prin)
+    crmd2 = inf1[["rmd_files"]]
+    if (is.null(crmd2)) {
+      dir1 = dirname(ficheroRmd_prin)
+      lfRmd = list.files(path=dir1,pattern=".Rmd")
+      crmd2 = c("index.Rmd",setdiff(lfRmd,"index.Rmd"))
+    } else if (class(crmd2)=="list") {
+      crmd2 = crmd2[[1]]  # el primero: "html", "latex", "word"
+    }
+
+  } else if (n_ficheroRmd_prin!="_bookdown.yml") {
+    fic02 = readLines(ficheroRmd_prin,warn = FALSE)
+    lrmd = stringr::str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
+    crmd = stringr::str_extract(fic02[lrmd],"['|\"][:graph:]*\\.Rmd['|\"]")
+    crmd2 = stringr::str_replace_all(crmd,"['|\"]","")
+    crmd2 = c(basename(ficheroRmd_prin),crmd2)
+  }
 
   if (length(crmd2)>=1) {
     crmd3 = vector("character",length = 0)
@@ -38,23 +74,27 @@ func_tcontenido_Rmd_tex = function(ficheroRmd_prin) {
     return(NULL)
   }
 
-  crmd2 = c(basename(ficheroRmd_prin),crmd2)
+  return(crmd2)
 
+}
+
+
+func_tcontenido_Rmd_bookdown = function(ficheroRmd_prin) {
+
+
+  crmd2 = func_extract_files_bookdown(ficheroRmd_prin)
+
+  #crmd2 = c(basename(ficheroRmd_prin),crmd2)
   lista_res = vector("list",length(crmd2))
   for (i in 1:length(crmd2)) {
     lista_parcial = list()
     ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
     fic01 = readLines(ficRmd,warn = FALSE)
-    # lt1 = str_which(fic01,"^# ")
-    # lt2 = str_which(fic01,"^## ")
-    # lt3 = str_which(fic01,"^### ")
-    # lt4 = str_which(fic01,"^#### ")
-    # lt5 = str_which(fic01,"^##### ")
-    lt1 = str_which(fic01,"\\\\chapter\\{([:graph:]*)")
-    lt2 = str_which(fic01,"\\\\section\\{([:graph:]*)")
-    lt3 = str_which(fic01,"\\\\subsection\\{([:graph:]*)")
-    lt4 = str_which(fic01,"\\\\subsubsection\\{([:graph:]*)")
-    lt5 = str_which(fic01,"\\\\subsubsubsection\\{([:graph:]*)")
+    lt1 = stringr::str_which(fic01,"^# ")
+    lt2 = stringr::str_which(fic01,"^## ")
+    lt3 = stringr::str_which(fic01,"^### ")
+    lt4 = stringr::str_which(fic01,"^#### ")
+    lt5 = stringr::str_which(fic01,"^##### ")
     lt = c(lt1,lt2,lt3,lt4,lt5)
     titulos_posiciones = sort(lt)
     titulos = fic01[titulos_posiciones]
@@ -68,7 +108,7 @@ func_tcontenido_Rmd_tex = function(ficheroRmd_prin) {
       for (j in 1:length(fic02)) {
         sl1 = unlist(strsplit(fic02[j],";;"))
         if (length(sl1)>2) {
-          if (sl1[2]=="tex") {
+          if (sl1[2]=="rmdbd") {
             ltg = stringr::str_which(fic01,sl1[3])
             s_si = fic01[ltg]
             lcad = stringr::str_extract(s_si,sl1[3])
@@ -113,23 +153,17 @@ func_tcontenido_Rmd_tex = function(ficheroRmd_prin) {
   return(lista_res)
 }
 
-func_tcontenido_Rmd_no_prin_tex = function(ficheroRmd) {
+func_tcontenido_Rmd_no_prin_bookdown = function(ficheroRmd) {
     i = 1
     lista_res = vector("list",1)
     lista_parcial = list()
     ficRmd = ficheroRmd
     fic01 = readLines(ficRmd,warn = FALSE)
-    #\\section\{([:graph:]*)\}
-    lt1 = str_which(fic01,"^\\\\chapter\\{([:graph:]*)")
-    lt2 = str_which(fic01,"^\\\\section\\{([:graph:]*)")
-    lt3 = str_which(fic01,"^\\\\subsection\\{([:graph:]*)")
-    lt4 = str_which(fic01,"^\\\\subsubsection\\{([:graph:]*)")
-    lt5 = str_which(fic01,"^\\\\subsubsubsection\\{([:graph:]*)")
-    # lt1 = str_which(fic01,"^# ")
-    # lt2 = str_which(fic01,"^## ")
-    # lt3 = str_which(fic01,"^### ")
-    # lt4 = str_which(fic01,"^#### ")
-    # lt5 = str_which(fic01,"^##### ")
+    lt1 = stringr::str_which(fic01,"^# ")
+    lt2 = stringr::str_which(fic01,"^## ")
+    lt3 = stringr::str_which(fic01,"^### ")
+    lt4 = stringr::str_which(fic01,"^#### ")
+    lt5 = stringr::str_which(fic01,"^##### ")
     lt = c(lt1,lt2,lt3,lt4,lt5)
     titulos_posiciones = sort(lt)
     titulos = fic01[titulos_posiciones]
@@ -143,8 +177,7 @@ func_tcontenido_Rmd_no_prin_tex = function(ficheroRmd) {
       for (j in 1:length(fic02)) {
         sl1 = unlist(strsplit(fic02[j],";;"))
         if (length(sl1)>2) {
-          if (sl1[2]=="tex") {
-            #browser()
+          if (sl1[2]=="rmdbd") {
             ltg = stringr::str_which(fic01,sl1[3])
             s_si = fic01[ltg]
             lcad = stringr::str_extract(s_si,sl1[3])
@@ -187,7 +220,7 @@ func_tcontenido_Rmd_no_prin_tex = function(ficheroRmd) {
 }
 
 
-func_tcontenido_Rmd_tb_tex = function(lr) {
+func_tcontenido_Rmd_tb_bookdown = function(lr) {
   tt = NULL
   for (i in 1:length(lr)) {
     fiche = lr[[i]]$ficheroRmd_nb
@@ -204,14 +237,14 @@ func_tcontenido_Rmd_tb_tex = function(lr) {
       if (is.null(tt)) {
         tt = t1
       } else {
-        tt = bind_rows(tt,t1)
+        tt = dplyr::bind_rows(tt,t1)
       }
     }
   }
   return(tt)
 }
 
-func_abrir_tituloficheroRmd_tex = function(tb_lr,cual,dir_trabajo) {
+func_abrir_tituloficheroRmd_bookdown = function(tb_lr,cual,dir_trabajo) {
   fichero = paste0(dir_trabajo,"/",tb_lr$Fichero[cual])
   fila = tb_lr$PosicionFila[cual]
   rstudioapi::navigateToFile(file = fichero,
@@ -219,33 +252,24 @@ func_abrir_tituloficheroRmd_tex = function(tb_lr,cual,dir_trabajo) {
                              column = 1)
 }
 
-func_limpiar_dentrochunk_tex = function(ficheroRmd_prin) {
+func_limpiar_dentrochunk_bookdown = function(ficheroRmd_prin) {
   # parte 1
-  fic02 = readLines(ficheroRmd_prin,warn = FALSE)
-  lrmd = str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
-  crmd = str_extract(fic02[lrmd],"'[:graph:]*\\.Rmd'")
-  crmd2 = str_replace_all(crmd,"'","")
+  # fic02 = readLines(ficheroRmd_prin,warn = FALSE)
+  # lrmd = stringr::str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
+  # crmd = stringr::str_extract(fic02[lrmd],"['|\"][:graph:]*\\.Rmd['|\"]")
+  # crmd2 = stringr::str_replace_all(crmd,"['|\"]","")
 
-  if (length(crmd2)>=1) {
-    crmd3 = vector("character",length = 0)
-    for (i in 1:length(crmd2)) {
-      ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
-      if (file.exists(ficRmd)) {
-        crmd3 = c(crmd3,crmd2[i])
-      }
-    }
-    crmd2 = crmd3
-  }
+  crmd2 = func_extract_files_bookdown(ficheroRmd_prin)
 
-
+  crmd2 = c(basename(ficheroRmd_prin),crmd2)
   lista_res = vector("list",length(crmd2))
   for (i in 1:length(crmd2)) {
     lista_parcial = list()
     ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
     fic01 = readLines(ficRmd,warn = FALSE)
-    lt1 = str_which(fic01,"^```\\{")  # "inicio"
-    lt1b = str_which(fic01,"^```r")  # "inicio"
-    lt2 = str_which(fic01,"^```[:space:]*")      # "fin"
+    lt1 = stringr::str_which(fic01,"^```\\{")  # "inicio"
+    lt1b = stringr::str_which(fic01,"^```r")  # "inicio"
+    lt2 = stringr::str_which(fic01,"^```[:space:]*")      # "fin"
     lt2 = setdiff(lt2,lt1)
     lt2 = setdiff(lt2,lt1b)
     v_posi = stringr::str_which(fic01,"^---") # cab. yaml
@@ -295,7 +319,7 @@ func_limpiar_dentrochunk_tex = function(ficheroRmd_prin) {
     if (is.null(tt)) {
       tt = t1
     } else {
-      tt = bind_rows(tt,t1)
+      tt = dplyr::bind_rows(tt,t1)
     }
   }
   return(tt)
@@ -304,16 +328,16 @@ func_limpiar_dentrochunk_tex = function(ficheroRmd_prin) {
 }
 
 
-func_limpiar_dentrochunk_no_prin_tex = function(ficheroRmd_prin) {
+func_limpiar_dentrochunk_no_prin_bookdown = function(ficheroRmd_prin) {
   crmd2 = basename(ficheroRmd_prin)
   lista_res = vector("list",length(crmd2))
   for (i in 1:length(crmd2)) {
     lista_parcial = list()
     ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
     fic01 = readLines(ficRmd,warn = FALSE)
-    lt1 = str_which(fic01,"^```\\{")  # "inicio"
-    lt1b = str_which(fic01,"^```r")  # "inicio"
-    lt2 = str_which(fic01,"^```[:space:]*")      # "fin"
+    lt1 = stringr::str_which(fic01,"^```\\{")  # "inicio"
+    lt1b = stringr::str_which(fic01,"^```r")  # "inicio"
+    lt2 = stringr::str_which(fic01,"^```[:space:]*")      # "fin"
     lt2 = setdiff(lt2,lt1)
     lt2 = setdiff(lt2,lt1b)
     v_posi = stringr::str_which(fic01,"^---") # cab. yaml
@@ -363,7 +387,7 @@ func_limpiar_dentrochunk_no_prin_tex = function(ficheroRmd_prin) {
     if (is.null(tt)) {
       tt = t1
     } else {
-      tt = bind_rows(tt,t1)
+      tt = dplyr::bind_rows(tt,t1)
     }
   }
   return(tt)
@@ -374,7 +398,7 @@ func_limpiar_dentrochunk_no_prin_tex = function(ficheroRmd_prin) {
 
 
 
-func_limpiar_mejorado_tex = function(tb_lr,tb_limp) {
+func_limpiar_mejorado_bookdown = function(tb_lr,tb_limp) {
   tb_lr_limpio = tb_lr
   tb_lr_limpio$borrar = FALSE
   for (i in 1:nrow(tb_lr)) {
@@ -413,31 +437,33 @@ func_limpiar_mejorado_tex = function(tb_lr,tb_limp) {
 
 
   tb_lr_limpio2 = tb_lr_limpio %>%
-    filter(!borrar) %>%
-    select(-borrar)
+    dplyr::filter(!borrar) %>%
+    dplyr::select(-borrar)
 
   return(tb_lr_limpio2)
 }
 
 
-func_tcontenido_Rmd_todo_tex = function(nfichero_prin) {
-  lr = func_tcontenido_Rmd_tex(nfichero_prin)
+func_tcontenido_Rmd_todo_bookdown = function(nfichero_prin) {
+  lr = func_tcontenido_Rmd_bookdown(nfichero_prin)
   if (is.null(lr)) {
     return(NULL)
   }
-  tb_lr = func_tcontenido_Rmd_tb_tex(lr)
-  #tb_limp = func_limpiar_dentrochunk(nfichero_prin)
-  #tb_lr_limpio2 = func_limpiar_mejorado(tb_lr,tb_limp)
-  tb_lr_limpio2 = tb_lr
+  tb_lr = func_tcontenido_Rmd_tb_bookdown(lr)
+  tb_limp = func_limpiar_dentrochunk_bookdown(nfichero_prin)
+  tb_lr_limpio2 = func_limpiar_mejorado_bookdown(tb_lr,tb_limp)
   return(tb_lr_limpio2)
 
 }
 
 
-func_tcontenido_Rmd_todo_no_prin_tex = function(nfichero_prin) {
+func_tcontenido_Rmd_todo_no_prin_bookdown = function(nfichero_prin) {
 
-  lr = func_tcontenido_Rmd_no_prin_tex(nfichero_prin)
-  tb_lr = func_tcontenido_Rmd_tb_tex(lr)
+  lr = func_tcontenido_Rmd_no_prin_bookdown(nfichero_prin)
+  tb_lr = func_tcontenido_Rmd_tb_bookdown(lr)
+  #cat(file=stderr(), "drawing histogram with", nfichero_prin, "bins", "\n")
+  #stopApp("Adios")
+  #str(lr)
   if (is.null(tb_lr)) {
     tb_lr_limpio2 = tibble::tibble(
       Fichero = basename(nfichero_prin),
@@ -447,11 +473,10 @@ func_tcontenido_Rmd_todo_no_prin_tex = function(nfichero_prin) {
     )
   } else {
     tb_lr$Fichero = basename(tb_lr$Fichero)
-    #tb_limp = func_limpiar_dentrochunk_no_prin_tex(nfichero_prin)
-    #tb_limp$Fichero = basename(tb_limp$Fichero)
-    #tb_lr_limpio2 = func_limpiar_mejorado_tex(tb_lr,tb_limp)
-    #tb_lr_limpio2$Fichero = basename(tb_lr_limpio2$Fichero)
-    tb_lr_limpio2 = tb_lr
+    tb_limp = func_limpiar_dentrochunk_no_prin_bookdown(nfichero_prin)
+    tb_limp$Fichero = basename(tb_limp$Fichero)
+    tb_lr_limpio2 = func_limpiar_mejorado_bookdown(tb_lr,tb_limp)
+    tb_lr_limpio2$Fichero = basename(tb_lr_limpio2$Fichero)
   }
   return(tb_lr_limpio2)
 

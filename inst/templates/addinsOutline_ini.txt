@@ -3,6 +3,12 @@ ref;;rmdno;;\\ref\{([:alnum:]*)\};;
 label;;rmd;;\\label\{([:graph:]*)\};;
 Includegraphics;;rmd;;include_graphics\(([:graph:]*)\);;inchunk
 knitr-kable-tabla;;rmd;;kable\(([:graph:]*)\);;inchunk
+ref;;rmdbdno;;\\ref\{([:graph]*)\};;
+ref;;rmdbdno;;\\ref\{([:alnum:]*)\};;
+label;;rmdbdno;;\\label\{([:graph:]*)\};;
+Includegraphics;;rmdbd;;include_graphics\(([:graph:]*)\);;inchunk
+ggplot2;;rmdbd;;ggplot\(([:graph:]*)\);;inchunk
+knitr-kable-tabla;;rmdbd;;kable\(([:graph:]*)\);;inchunk
 label;;texno;;\\label\{([:graph:]*)\};;
 begin-thm;;texno;;\\begin{thm};;
 begin-proof;;texno;;\\begin{proof};;

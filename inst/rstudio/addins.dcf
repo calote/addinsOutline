@@ -3,6 +3,11 @@ Description: Displays Outline of an R Markdown file with and without child files
 Binding: run_addinsOutline_Rmd
 Interactive: true
 
+Name: Show Outline bookdown-R Markdown
+Description: Displays Outline of an bookdown project or R Markdown file with and without child files
+Binding: run_addinsOutline_Rmd_bookdown
+Interactive: true
+
 Name: Show Outline Rnw and/or LaTeX
 Description: Displays Outline of an Rnw and/or LaTeX file with and without child files
 Binding: run_addinsOutline_tex

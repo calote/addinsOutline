@@ -1,14 +1,28 @@
 library(stringr)
 library(dplyr)
-library(tidyr)
+#library(tidyr)
+globalVariables(c("%>%", "Filas", "borrar"))
 
 file_ini = "addinsOutline_ini.txt"
 
 func_tcontenido_Rmd = function(ficheroRmd_prin) {
   fic02 = readLines(ficheroRmd_prin,warn = FALSE)
-  lrmd = str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
-  crmd = str_extract(fic02[lrmd],"'[:graph:]*\\.Rmd'")
-  crmd2 = str_replace_all(crmd,"'","")
+  lrmd = stringr::str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
+  crmd = stringr::str_extract(fic02[lrmd],"['|\"][:graph:]*\\.Rmd['|\"]")
+  crmd2 = stringr::str_replace_all(crmd,"['|\"]","")
+
+  if (length(crmd2)>=1) {
+    crmd3 = vector("character",length = 0)
+    for (i in 1:length(crmd2)) {
+      ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
+      if (file.exists(ficRmd)) {
+        crmd3 = c(crmd3,crmd2[i])
+      }
+    }
+    crmd2 = crmd3
+  }
+
+
   if (length(crmd2)<1) {
     return(NULL)
   }
@@ -20,11 +34,11 @@ func_tcontenido_Rmd = function(ficheroRmd_prin) {
     lista_parcial = list()
     ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
     fic01 = readLines(ficRmd,warn = FALSE)
-    lt1 = str_which(fic01,"^# ")
-    lt2 = str_which(fic01,"^## ")
-    lt3 = str_which(fic01,"^### ")
-    lt4 = str_which(fic01,"^#### ")
-    lt5 = str_which(fic01,"^##### ")
+    lt1 = stringr::str_which(fic01,"^# ")
+    lt2 = stringr::str_which(fic01,"^## ")
+    lt3 = stringr::str_which(fic01,"^### ")
+    lt4 = stringr::str_which(fic01,"^#### ")
+    lt5 = stringr::str_which(fic01,"^##### ")
     lt = c(lt1,lt2,lt3,lt4,lt5)
     titulos_posiciones = sort(lt)
     titulos = fic01[titulos_posiciones]
@@ -89,11 +103,11 @@ func_tcontenido_Rmd_no_prin = function(ficheroRmd) {
     lista_parcial = list()
     ficRmd = ficheroRmd
     fic01 = readLines(ficRmd,warn = FALSE)
-    lt1 = str_which(fic01,"^# ")
-    lt2 = str_which(fic01,"^## ")
-    lt3 = str_which(fic01,"^### ")
-    lt4 = str_which(fic01,"^#### ")
-    lt5 = str_which(fic01,"^##### ")
+    lt1 = stringr::str_which(fic01,"^# ")
+    lt2 = stringr::str_which(fic01,"^## ")
+    lt3 = stringr::str_which(fic01,"^### ")
+    lt4 = stringr::str_which(fic01,"^#### ")
+    lt5 = stringr::str_which(fic01,"^##### ")
     lt = c(lt1,lt2,lt3,lt4,lt5)
     titulos_posiciones = sort(lt)
     titulos = fic01[titulos_posiciones]
@@ -167,7 +181,7 @@ func_tcontenido_Rmd_tb = function(lr) {
       if (is.null(tt)) {
         tt = t1
       } else {
-        tt = bind_rows(tt,t1)
+        tt = dplyr::bind_rows(tt,t1)
       }
     }
   }
@@ -185,18 +199,30 @@ func_abrir_tituloficheroRmd = function(tb_lr,cual,dir_trabajo) {
 func_limpiar_dentrochunk = function(ficheroRmd_prin) {
   # parte 1
   fic02 = readLines(ficheroRmd_prin,warn = FALSE)
-  lrmd = str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
-  crmd = str_extract(fic02[lrmd],"'[:graph:]*\\.Rmd'")
-  crmd2 = str_replace_all(crmd,"'","")
+  lrmd = stringr::str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
+  crmd = stringr::str_extract(fic02[lrmd],"['|\"][:graph:]*\\.Rmd['|\"]")
+  crmd2 = stringr::str_replace_all(crmd,"['|\"]","")
+  if (length(crmd2)>=1) {
+    crmd3 = vector("character",length = 0)
+    for (i in 1:length(crmd2)) {
+      ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
+      if (file.exists(ficRmd)) {
+        crmd3 = c(crmd3,crmd2[i])
+      }
+    }
+    crmd2 = crmd3
+  }
+
+
   crmd2 = c(basename(ficheroRmd_prin),crmd2)
   lista_res = vector("list",length(crmd2))
   for (i in 1:length(crmd2)) {
     lista_parcial = list()
     ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
     fic01 = readLines(ficRmd,warn = FALSE)
-    lt1 = str_which(fic01,"^```\\{")  # "inicio"
-    lt1b = str_which(fic01,"^```r")  # "inicio"
-    lt2 = str_which(fic01,"^```[:space:]*")      # "fin"
+    lt1 = stringr::str_which(fic01,"^```\\{")  # "inicio"
+    lt1b = stringr::str_which(fic01,"^```r")  # "inicio"
+    lt2 = stringr::str_which(fic01,"^```[:space:]*")      # "fin"
     lt2 = setdiff(lt2,lt1)
     lt2 = setdiff(lt2,lt1b)
     v_posi = stringr::str_which(fic01,"^---") # cab. yaml
@@ -219,7 +245,7 @@ func_limpiar_dentrochunk = function(ficheroRmd_prin) {
       )
     }
     lbtt2 = lbtt %>%
-      arrange(Filas)
+      dplyr::arrange(Filas)
     titulos_posiciones = lbtt2$Filas
     titulos = fic01[titulos_posiciones]
     lista_parcial$ficheroRmd_nb = crmd2[i]
@@ -246,7 +272,7 @@ func_limpiar_dentrochunk = function(ficheroRmd_prin) {
     if (is.null(tt)) {
       tt = t1
     } else {
-      tt = bind_rows(tt,t1)
+      tt = dplyr::bind_rows(tt,t1)
     }
   }
   return(tt)
@@ -262,9 +288,9 @@ func_limpiar_dentrochunk_no_prin = function(ficheroRmd_prin) {
     lista_parcial = list()
     ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
     fic01 = readLines(ficRmd,warn = FALSE)
-    lt1 = str_which(fic01,"^```\\{")  # "inicio"
-    lt1b = str_which(fic01,"^```r")  # "inicio"
-    lt2 = str_which(fic01,"^```[:space:]*")      # "fin"
+    lt1 = stringr::str_which(fic01,"^```\\{")  # "inicio"
+    lt1b = stringr::str_which(fic01,"^```r")  # "inicio"
+    lt2 = stringr::str_which(fic01,"^```[:space:]*")      # "fin"
     lt2 = setdiff(lt2,lt1)
     lt2 = setdiff(lt2,lt1b)
     v_posi = stringr::str_which(fic01,"^---") # cab. yaml
@@ -314,7 +340,7 @@ func_limpiar_dentrochunk_no_prin = function(ficheroRmd_prin) {
     if (is.null(tt)) {
       tt = t1
     } else {
-      tt = bind_rows(tt,t1)
+      tt = dplyr::bind_rows(tt,t1)
     }
   }
   return(tt)
@@ -364,8 +390,8 @@ func_limpiar_mejorado = function(tb_lr,tb_limp) {
 
 
   tb_lr_limpio2 = tb_lr_limpio %>%
-    filter(!borrar) %>%
-    select(-borrar)
+    dplyr::filter(!borrar) %>%
+    dplyr::select(-borrar)
 
   return(tb_lr_limpio2)
 }
