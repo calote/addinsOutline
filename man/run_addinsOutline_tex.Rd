@@ -20,5 +20,5 @@ run_addinsOutline_tex()
 }
 }
 \seealso{
-The function \code{\link{run_addinsOutline_Rmd}()}.
+The function \code{\link{run_addinsOutline_Rmd}()} and \code{\link{run_addinsOutline_Rmd_bookdown}()}.
 }

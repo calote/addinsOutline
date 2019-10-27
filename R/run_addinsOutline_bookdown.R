@@ -188,7 +188,8 @@ run_addinsOutline_Rmd_bookdown <- function() {
       x = input$IdActualizar
       if (length(unlist(input$fichero_main[[1]])[-1])>0) {
 
-        listado = c("/Users", unlist(input$fichero_main[[1]])[-1] )
+        #listado = c("/Users", unlist(input$fichero_main[[1]])[-1] )
+        listado = c("~", unlist(input$fichero_main[[1]])[-1] )
         nfichero = paste(listado,sep="",collapse = "/")
         if (file.exists(nfichero)) {
           isolate({
@@ -216,6 +217,27 @@ run_addinsOutline_Rmd_bookdown <- function() {
         }
 
       } else {
+
+        nfichero = VR_Info$nfichero_prin
+        if (file.exists(nfichero)) {
+          isolate({
+            VR_Info$nfichero_prin <- nfichero
+            VR_Info$dir_trab <- dirname(VR_Info$nfichero_prin)
+            VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo_bookdown(VR_Info$nfichero_prin)
+            #cat(file=stderr(), "Paso 1", nfichero, "bins", "\n")
+            if (is.null(VR_Info$tb_lr_limpio2)) {
+              VR_Info$tb_lr_limpio2 <- func_tcontenido_Rmd_todo_no_prin_bookdown(VR_Info$nfichero_prin)
+              tb_lr_limpio_Fijo <<- VR_Info$tb_lr_limpio2
+              lficheros <<- c(tx_Todo)
+              VG_label_select <<- tx_selectchild_2
+            } else {
+              tb_lr_limpio_Fijo <<- VR_Info$tb_lr_limpio2
+              lficheros <<- c(tx_Todo,sort(func_unique_bookdown(VR_Info$tb_lr_limpio2$Fichero)))
+              VG_label_select <<- tx_selectchild
+
+            }
+          })
+        }
         print(VR_Info$nfichero_prin)
       }
 
@@ -224,13 +246,8 @@ run_addinsOutline_Rmd_bookdown <- function() {
 
 
     observeEvent(input$fichero_main, {
-      nfichero = shinyFileChoose(input, 'fichero_main', roots=c(roots='/Users/'), filetypes=c('Rmd','yml'))
-      #browser()
-      # updateSelectInput(session, "IdFichero",
-      #                   label = VG_label_select,
-      #                   choices = lficheros,
-      #                   selected = lficheros[1]
-      #)
+      #nfichero = shinyFileChoose(input, 'fichero_main', roots=c(roots='/Users/'), filetypes=c('Rmd','yml'))
+      nfichero = shinyFileChoose(input, 'fichero_main', roots=c(roots='~'), filetypes=c('Rmd','yml'))
 
     })
 
@@ -248,7 +265,7 @@ run_addinsOutline_Rmd_bookdown <- function() {
 
       if (ss!=tx_Todo) {
         VR_Info$tb_lr_limpio2 <- tb_lr_limpio_Fijo %>%
-          filter(Fichero==ss)
+          dplyr::filter(Fichero==ss)
       } else {
         VR_Info$tb_lr_limpio2 <- tb_lr_limpio_Fijo
       }

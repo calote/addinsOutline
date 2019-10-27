@@ -1,4 +1,4 @@
-ref;;rmd;;\\ref\{([:graph]*)\};;
+ref;;rmd;;\\ref\{([:graph:]*)\};;
 ref;;rmdno;;\\ref\{([:alnum:]*)\};;
 label;;rmd;;\\label\{([:graph:]*)\};;
 Includegraphics;;rmd;;include_graphics\(([:graph:]*)\);;inchunk
