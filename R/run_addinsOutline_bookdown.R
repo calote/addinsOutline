@@ -16,6 +16,7 @@
 #' @importFrom DT DTOutput renderDT datatable JS
 #' @importFrom yaml read_yaml
 #' @importFrom dplyr filter select arrange bind_rows tibble %>%
+#' @importFrom fs path_home
 #' @import miniUI rstudioapi shiny shinyFiles stringr
 #' @export
 run_addinsOutline_Rmd_bookdown <- function() {
@@ -94,6 +95,7 @@ run_addinsOutline_Rmd_bookdown <- function() {
 ##########----------
   server <- function(input, output, session) {
 
+    volumes <- c(Home = fs::path_home(), getVolumes()())
     contexto <- rstudioapi::getActiveDocumentContext()
     texto_contexto <- contexto$contents
     Ini_nfichero_prin = contexto$path
@@ -191,7 +193,8 @@ run_addinsOutline_Rmd_bookdown <- function() {
 
         #listado = c("/Users", unlist(input$fichero_main[[1]])[-1] )
         listado = c("~", unlist(input$fichero_main[[1]])[-1] )
-        nfichero = paste(listado,sep="",collapse = "/")
+        #nfichero = paste(listado,sep="",collapse = "/")
+        nfichero = parseFilePaths(roots=volumes, input$fichero_main)$datapath
         if (file.exists(nfichero)) {
           isolate({
             VR_Info$nfichero_prin <- nfichero
@@ -263,7 +266,8 @@ run_addinsOutline_Rmd_bookdown <- function() {
 
     observeEvent(input$fichero_main, {
       #nfichero = shinyFileChoose(input, 'fichero_main', roots=c(roots='/Users/'), filetypes=c('Rmd','yml'))
-      nfichero = shinyFileChoose(input, 'fichero_main', roots=c(roots='~'), filetypes=c('Rmd','yml'))
+      #nfichero = shinyFileChoose(input, 'fichero_main', roots=c(roots='~'), filetypes=c('Rmd','yml'))
+      nfichero = shinyFileChoose(input, 'fichero_main', roots=volumes, filetypes=c('Rmd','yml'))
 
       updateSelectInput(session, "IdFichero",
                         label = VG_label_select,

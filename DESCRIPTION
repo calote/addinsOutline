@@ -21,6 +21,7 @@ Imports:
   tibble,
   yaml,
   rmarkdown,
+  fs,
   DT
 RoxygenNote: 6.1.1
 Suggests: 
