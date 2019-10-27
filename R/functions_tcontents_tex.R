@@ -6,12 +6,14 @@ globalVariables(c("%>%", "Filas", "borrar"))
 file_ini = "addinsOutline_ini.txt"
 
 func_readLines_tex = function(file1,encoding1 = "UTF-8") {
+  if (!file.exists(file1)) return(NULL)
   fic02 = readLines(file1,warn = FALSE,encoding = encoding1)
   return(fic02)
 }
 
 func_tcontenido_Rmd_tex = function(ficheroRmd_prin) {
-  fic02 = readLines(ficheroRmd_prin,warn = FALSE,encoding = "UTF-8")
+  #fic02 = readLines(ficheroRmd_prin,warn = FALSE,encoding = "UTF-8")
+  fic02 = func_readLines_tex(ficheroRmd_prin)
   lrmd = stringr::str_which(fic02,"^\\\\input\\{([:graph:]*)\\}")
   crmd = stringr::str_extract(fic02[lrmd],"\\{[:graph:]*\\.(tex|Rnw)\\}")
   crmd2 = stringr::str_replace_all(crmd,fixed("{"),"")
@@ -45,7 +47,8 @@ func_tcontenido_Rmd_tex = function(ficheroRmd_prin) {
   for (i in 1:length(crmd2)) {
     lista_parcial = list()
     ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
-    fic01 = readLines(ficRmd,warn = FALSE,encoding = "UTF-8")
+    #fic01 = readLines(ficRmd,warn = FALSE,encoding = "UTF-8")
+    fic01 = func_readLines_tex(ficRmd)
     lt1 = str_which(fic01,"\\\\chapter\\{([:graph:]*)")
     lt2 = str_which(fic01,"\\\\section\\{([:graph:]*)")
     lt3 = str_which(fic01,"\\\\subsection\\{([:graph:]*)")
@@ -57,7 +60,8 @@ func_tcontenido_Rmd_tex = function(ficheroRmd_prin) {
     Inchunk = c(rep(FALSE,length(titulos)))
     nfic02 = paste0(dirname(ficheroRmd_prin),"/",file_ini)
     if (file.exists(nfic02)) {
-      fic02 = readLines(nfic02,warn=FALSE,encoding = "UTF-8")
+      #fic02 = readLines(nfic02,warn=FALSE,encoding = "UTF-8")
+      fic02 = func_readLines_tex(nfic02)
       ltg_all = vector()
       lcad_all = vector()
       lchunk_all = vector()
@@ -114,7 +118,8 @@ func_tcontenido_Rmd_no_prin_tex = function(ficheroRmd) {
     lista_res = vector("list",1)
     lista_parcial = list()
     ficRmd = ficheroRmd
-    fic01 = readLines(ficRmd,warn = FALSE,encoding = "UTF-8")
+    #fic01 = readLines(ficRmd,warn = FALSE,encoding = "UTF-8")
+    fic01 = func_readLines_tex(ficRmd)
     lt1 = str_which(fic01,"^\\\\chapter\\{([:graph:]*)")
     lt2 = str_which(fic01,"^\\\\section\\{([:graph:]*)")
     lt3 = str_which(fic01,"^\\\\subsection\\{([:graph:]*)")
@@ -126,7 +131,8 @@ func_tcontenido_Rmd_no_prin_tex = function(ficheroRmd) {
     Inchunk = c(rep(FALSE,length(titulos)))
     nfic02 = paste0(dirname(ficheroRmd),"/",file_ini)
     if (file.exists(nfic02)) {
-      fic02 = readLines(nfic02,warn=FALSE,encoding = "UTF-8")
+      #fic02 = readLines(nfic02,warn=FALSE,encoding = "UTF-8")
+      fic02 = func_readLines_tex(nfic02)
       ltg_all = vector()
       lcad_all = vector()
       lchunk_all = vector()

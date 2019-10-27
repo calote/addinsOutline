@@ -6,11 +6,12 @@
 #'
 #' @return RStudio Addins with browserViewer()
 #'
-#' @seealso The function \code{\link{run_addinsOutline_tex}()}.
+#' @seealso The function \code{\link{run_addinsOutline_tex}()} and
+#' \code{\link{run_addinsOutline_Rmd}()}.
 #'
 #' @examples
 #' \dontrun{
-#' run_addinsOutline_Rmd()
+#' run_addinsOutline_Rmd_bookdown()
 #' }
 #' @importFrom DT DTOutput renderDT datatable JS
 #' @importFrom yaml read_yaml
@@ -96,9 +97,6 @@ run_addinsOutline_Rmd_bookdown <- function() {
     contexto <- rstudioapi::getActiveDocumentContext()
     texto_contexto <- contexto$contents
     Ini_nfichero_prin = contexto$path
-    #Ini_nfichero_prin = "/Users/calvo/Downloads/addinsOutline_aux/ex_bookdown/index.Rmd"
-    #Ini_nfichero_prin = "/Users/calvo/Downloads/addinsOutline_aux/ex_bookdown3/_bookdown.yml"
-    #browser()
     if (file.exists(Ini_nfichero_prin)) {
       Ini_dir_trab = dirname(Ini_nfichero_prin)
       Ini_tb_lr_limpio2 <- func_tcontenido_Rmd_todo_bookdown(Ini_nfichero_prin)
@@ -111,7 +109,8 @@ run_addinsOutline_Rmd_bookdown <- function() {
         VG_label_select <- tx_selectchild_2
       } else {
         tb_lr_limpio_Fijo = Ini_tb_lr_limpio2
-        lficheros <- c(tx_Todo,sort(func_unique_bookdown(Ini_tb_lr_limpio2$Fichero)))
+        #lficheros <- c(tx_Todo,sort(func_unique_bookdown(Ini_tb_lr_limpio2$Fichero)))
+        lficheros <- c(tx_Todo,func_unique_bookdown(Ini_tb_lr_limpio2$Fichero))
         VG_label_select <- tx_selectchild
 
         updateSelectInput(session, "IdFichero",
@@ -139,7 +138,8 @@ run_addinsOutline_Rmd_bookdown <- function() {
 
         }
         tb_lr_limpio_Fijo = Ini_tb_lr_limpio2
-        lficheros = c(tx_Todo,sort(func_unique_bookdown(Ini_tb_lr_limpio2$Fichero)))
+        #lficheros = c(tx_Todo,sort(func_unique_bookdown(Ini_tb_lr_limpio2$Fichero)))
+        lficheros = c(tx_Todo,func_unique_bookdown(Ini_tb_lr_limpio2$Fichero))
         VG_label_select <- tx_selectchild
       } else {
         Ini_dir_trab = dirname(Ini_nfichero_prin)
@@ -151,7 +151,8 @@ run_addinsOutline_Rmd_bookdown <- function() {
         )
 
         tb_lr_limpio_Fijo = Ini_tb_lr_limpio2
-        lficheros = c(tx_Todo,sort(func_unique_bookdown(Ini_tb_lr_limpio2$Fichero)))
+        #lficheros = c(tx_Todo,sort(func_unique_bookdown(Ini_tb_lr_limpio2$Fichero)))
+        lficheros = c(tx_Todo,func_unique_bookdown(Ini_tb_lr_limpio2$Fichero))
         VG_label_select <- tx_filesbutton_ti
 
       }
@@ -204,12 +205,18 @@ run_addinsOutline_Rmd_bookdown <- function() {
               VG_label_select <<- tx_selectchild_2
             } else {
               tb_lr_limpio_Fijo <<- VR_Info$tb_lr_limpio2
-              lficheros <<- c(tx_Todo,sort(func_unique_bookdown(VR_Info$tb_lr_limpio2$Fichero)))
+              #lficheros <<- c(tx_Todo,sort(func_unique_bookdown(VR_Info$tb_lr_limpio2$Fichero)))
+              lficheros <<- c(tx_Todo,func_unique_bookdown(VR_Info$tb_lr_limpio2$Fichero))
               VG_label_select <<- tx_selectchild
 
             }
 
           })
+          updateSelectInput(session, "IdFichero",
+                            label = VG_label_select,
+                            choices = lficheros,
+                            selected = lficheros[1]
+          )
 
           print(nfichero)
         } else {
@@ -232,14 +239,23 @@ run_addinsOutline_Rmd_bookdown <- function() {
               VG_label_select <<- tx_selectchild_2
             } else {
               tb_lr_limpio_Fijo <<- VR_Info$tb_lr_limpio2
-              lficheros <<- c(tx_Todo,sort(func_unique_bookdown(VR_Info$tb_lr_limpio2$Fichero)))
+              #lficheros <<- c(tx_Todo,sort(func_unique_bookdown(VR_Info$tb_lr_limpio2$Fichero)))
+              lficheros <<- c(tx_Todo,func_unique_bookdown(VR_Info$tb_lr_limpio2$Fichero))
               VG_label_select <<- tx_selectchild
 
             }
           })
         }
+
+        updateSelectInput(session, "IdFichero",
+                          label = VG_label_select,
+                          choices = lficheros,
+                          selected = lficheros[1]
+        )
+
         print(VR_Info$nfichero_prin)
       }
+
 
 
     })
@@ -248,6 +264,13 @@ run_addinsOutline_Rmd_bookdown <- function() {
     observeEvent(input$fichero_main, {
       #nfichero = shinyFileChoose(input, 'fichero_main', roots=c(roots='/Users/'), filetypes=c('Rmd','yml'))
       nfichero = shinyFileChoose(input, 'fichero_main', roots=c(roots='~'), filetypes=c('Rmd','yml'))
+
+      updateSelectInput(session, "IdFichero",
+                        label = VG_label_select,
+                        choices = lficheros,
+                        selected = lficheros[1]
+      )
+
 
     })
 
@@ -262,7 +285,6 @@ run_addinsOutline_Rmd_bookdown <- function() {
 
     observeEvent(input$IdFichero, {
       ss = input$IdFichero
-
       if (ss!=tx_Todo) {
         VR_Info$tb_lr_limpio2 <- tb_lr_limpio_Fijo %>%
           dplyr::filter(Fichero==ss)
@@ -274,12 +296,9 @@ run_addinsOutline_Rmd_bookdown <- function() {
 
     output$TablaDT = DT::renderDT({
       s1 = input$IdFichero
-      s2 = input$fichero_main
-      updateSelectInput(session, "IdFichero",
-                        label = VG_label_select,
-                        choices = lficheros,
-                        selected = lficheros[1]
-      )
+      isolate({
+        s2 = input$fichero_main
+      })
       if (B_spanish) {
         DT::datatable(VR_Info$tb_lr_limpio2,
                       selection = "single",
@@ -325,8 +344,15 @@ run_addinsOutline_Rmd_bookdown <- function() {
   } # final server
   #runGadget(ui, server, viewer = paneViewer(minHeight = "maximize")) # default
   #runGadget(ui, server, viewer = paneViewer()) # default
-  #runGadget(ui, server, viewer = dialogViewer("Tabla Contenido", height = 600,width = 900))
-  runGadget(ui, server, viewer = browserViewer())
+  if (is.null(getOption("addinsOutline"))) {
+    runGadget(ui, server, viewer = browserViewer())
+  } else if (getOption("addinsOutline")=="dialog") {
+    runGadget(ui, server, viewer = dialogViewer("Table of Contents Bookdown", height = 600,width = 900))
+  } else if (getOption("addinsOutline")=="pane") {
+    runGadget(ui, server, viewer = paneViewer())
+  } else {
+    runGadget(ui, server, viewer = browserViewer())
+  }
 }
 
 #get_tcontents()

@@ -95,8 +95,6 @@ run_addinsOutline_Rmd <- function() {
     contexto <- rstudioapi::getActiveDocumentContext()
     texto_contexto <- contexto$contents
     Ini_nfichero_prin = contexto$path
-    #Ini_nfichero_prin = "/Users/calvo/Downloads/addinsOutline_aux/ex_Rmd/MemoriaTFE_2/tfe_principal.Rmd"
-    #browser()
     if (file.exists(Ini_nfichero_prin)) {
       Ini_dir_trab = dirname(Ini_nfichero_prin)
       Ini_tb_lr_limpio2 <- func_tcontenido_Rmd_todo(Ini_nfichero_prin)
@@ -208,6 +206,11 @@ run_addinsOutline_Rmd <- function() {
             }
 
           })
+          updateSelectInput(session, "IdFichero",
+                            label = VG_label_select,
+                            choices = lficheros,
+                            selected = lficheros[1]
+          )
 
           print(nfichero)
         } else {
@@ -237,6 +240,12 @@ run_addinsOutline_Rmd <- function() {
 
           })
         }
+        updateSelectInput(session, "IdFichero",
+                          label = VG_label_select,
+                          choices = lficheros,
+                          selected = lficheros[1]
+        )
+
         print(VR_Info$nfichero_prin)
       }
 
@@ -247,6 +256,12 @@ run_addinsOutline_Rmd <- function() {
     observeEvent(input$fichero_main, {
       #nfichero = shinyFileChoose(input, 'fichero_main', roots=c(roots='/Users/'), filetypes=c('Rmd'))
       nfichero = shinyFileChoose(input, 'fichero_main', roots=c(roots="~"), filetypes=c('Rmd'))
+
+      updateSelectInput(session, "IdFichero",
+                        label = VG_label_select,
+                        choices = lficheros,
+                        selected = lficheros[1]
+      )
 
 
     })
@@ -274,12 +289,9 @@ run_addinsOutline_Rmd <- function() {
 
     output$TablaDT = DT::renderDT({
       s1 = input$IdFichero
-      s2 = input$fichero_main
-      updateSelectInput(session, "IdFichero",
-                        label = VG_label_select,
-                        choices = lficheros,
-                        selected = lficheros[1]
-      )
+      isolate({
+        s2 = input$fichero_main
+      })
 
       if (B_spanish) {
         DT::datatable(VR_Info$tb_lr_limpio2,

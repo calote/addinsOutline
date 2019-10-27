@@ -10,6 +10,13 @@ func_unique_bookdown = function(x) {
   return(x[!duplicated(x)])
 }
 
+func_readLines_bookdown = function(file1,encoding1 = "UTF-8") {
+  if (!file.exists(file1)) return(NULL)
+  fic02 = readLines(file1,warn = FALSE,encoding = encoding1)
+  return(fic02)
+}
+
+
 func_extract_files_bookdown = function(ficheroRmd_prin) {
 
   n_ficheroRmd_prin = basename(ficheroRmd_prin)
@@ -18,12 +25,13 @@ func_extract_files_bookdown = function(ficheroRmd_prin) {
     crmd2 = inf1[["rmd_files"]]
 
     if (is.null(crmd2)) {
-      npr = inf1[["book_filename"]]
-      if (!is.null(npr)) {
-        ficRmd2 = paste0(dirname(ficheroRmd_prin),"/",npr)
-      } else {
-        ficRmd2 = paste0(dirname(ficheroRmd_prin),"/","index.Rmd")
-      }
+      # npr = inf1[["book_filename"]]
+      # if (!is.null(npr)) {
+      #   ficRmd2 = paste0(dirname(ficheroRmd_prin),"/",npr)
+      # } else {
+      #   ficRmd2 = paste0(dirname(ficheroRmd_prin),"/","index.Rmd")
+      # }
+      ficRmd2 = paste0(dirname(ficheroRmd_prin),"/","index.Rmd")
       if (file.exists(ficRmd2)) {
         inf1 = rmarkdown::yaml_front_matter(input=ficRmd2)
         crmd2 = inf1[["rmd_files"]]
@@ -52,7 +60,8 @@ func_extract_files_bookdown = function(ficheroRmd_prin) {
     }
 
   } else if (n_ficheroRmd_prin!="_bookdown.yml") {
-    fic02 = readLines(ficheroRmd_prin,warn = FALSE)
+    #fic02 = readLines(ficheroRmd_prin,warn = FALSE)
+    fic02 = func_readLines_bookdown(ficheroRmd_prin)
     lrmd = stringr::str_which(fic02,"^```\\{r child[:space:]?=[:space:]?[:graph:]*\\}")
     crmd = stringr::str_extract(fic02[lrmd],"['|\"][:graph:]*\\.Rmd['|\"]")
     crmd2 = stringr::str_replace_all(crmd,"['|\"]","")
@@ -89,7 +98,8 @@ func_tcontenido_Rmd_bookdown = function(ficheroRmd_prin) {
   for (i in 1:length(crmd2)) {
     lista_parcial = list()
     ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
-    fic01 = readLines(ficRmd,warn = FALSE)
+    #fic01 = readLines(ficRmd,warn = FALSE)
+    fic01 = func_readLines_bookdown(ficRmd)
     lt1 = stringr::str_which(fic01,"^# ")
     lt2 = stringr::str_which(fic01,"^## ")
     lt3 = stringr::str_which(fic01,"^### ")
@@ -101,7 +111,8 @@ func_tcontenido_Rmd_bookdown = function(ficheroRmd_prin) {
     Inchunk = c(rep(FALSE,length(titulos)))
     nfic02 = paste0(dirname(ficheroRmd_prin),"/",file_ini)
     if (file.exists(nfic02)) {
-      fic02 = readLines(nfic02,warn=FALSE)
+      #fic02 = readLines(nfic02,warn=FALSE)
+      fic02 = func_readLines_bookdown(nfic02)
       ltg_all = vector()
       lcad_all = vector()
       lchunk_all = vector()
@@ -158,7 +169,8 @@ func_tcontenido_Rmd_no_prin_bookdown = function(ficheroRmd) {
     lista_res = vector("list",1)
     lista_parcial = list()
     ficRmd = ficheroRmd
-    fic01 = readLines(ficRmd,warn = FALSE)
+    #fic01 = readLines(ficRmd,warn = FALSE)
+    fic01 = func_readLines_bookdown(ficRmd)
     lt1 = stringr::str_which(fic01,"^# ")
     lt2 = stringr::str_which(fic01,"^## ")
     lt3 = stringr::str_which(fic01,"^### ")
@@ -170,7 +182,8 @@ func_tcontenido_Rmd_no_prin_bookdown = function(ficheroRmd) {
     Inchunk = c(rep(FALSE,length(titulos)))
     nfic02 = paste0(dirname(ficheroRmd),"/",file_ini)
     if (file.exists(nfic02)) {
-      fic02 = readLines(nfic02,warn=FALSE)
+      #fic02 = readLines(nfic02,warn=FALSE)
+      fic02 = func_readLines_bookdown(fic02)
       ltg_all = vector()
       lcad_all = vector()
       lchunk_all = vector()
@@ -266,7 +279,8 @@ func_limpiar_dentrochunk_bookdown = function(ficheroRmd_prin) {
   for (i in 1:length(crmd2)) {
     lista_parcial = list()
     ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
-    fic01 = readLines(ficRmd,warn = FALSE)
+    #fic01 = readLines(ficRmd,warn = FALSE)
+    fic01 = func_readLines_bookdown(ficRmd)
     lt1 = stringr::str_which(fic01,"^```\\{")  # "inicio"
     lt1b = stringr::str_which(fic01,"^```r")  # "inicio"
     lt2 = stringr::str_which(fic01,"^```[:space:]*")      # "fin"
@@ -334,7 +348,8 @@ func_limpiar_dentrochunk_no_prin_bookdown = function(ficheroRmd_prin) {
   for (i in 1:length(crmd2)) {
     lista_parcial = list()
     ficRmd = paste0(dirname(ficheroRmd_prin),"/",crmd2[i])
-    fic01 = readLines(ficRmd,warn = FALSE)
+    #fic01 = readLines(ficRmd,warn = FALSE)
+    fic01 = func_readLines_bookdown(ficRmd)
     lt1 = stringr::str_which(fic01,"^```\\{")  # "inicio"
     lt1b = stringr::str_which(fic01,"^```r")  # "inicio"
     lt2 = stringr::str_which(fic01,"^```[:space:]*")      # "fin"
