@@ -34,6 +34,25 @@ library(addinsOutline)
 run_addinsOutline_Rmd()
 ```
 
+The default AddinsOutline is displayed in an external browser (see "shiny::browserViewer"), but can be configured to act as a dialogue in RStudio (see "shiny::dialogViewer") or in the "Viewer" panel of RStudio (see "shiny::paneViewer"). It can be customized by modifying the "addinsOutline" option as follows:
+
+- "dialogViewer"
+``` r
+options("addinsOutline"="dialog")
+```
+
+- "paneViewer"
+``` r
+options("addinsOutline"="pane")
+```
+
+- "browserViewer" (default)
+``` r
+options("addinsOutline"="browser")
+```
+
+
+
 The next code will copy the configuration file "addinsOutline_ini.txt" to the current working directory
 
 ``` r

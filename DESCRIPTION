@@ -10,7 +10,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends:
-    R (>= 3.3)
+    R (>= 3.1)
 Imports:
   shiny (>= 0.13),
   miniUI (>= 0.1),

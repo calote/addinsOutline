@@ -343,7 +343,15 @@ run_addinsOutline_Rmd <- function() {
   #runGadget(ui, server, viewer = paneViewer(minHeight = "maximize")) # default
   #runGadget(ui, server, viewer = paneViewer()) # default
   #runGadget(ui, server, viewer = dialogViewer("Tabla Contenido", height = 600,width = 900))
-  runGadget(ui, server, viewer = browserViewer())
+  if (is.null(getOption("addinsOutline"))) {
+    runGadget(ui, server, viewer = browserViewer())
+  } else if (getOption("addinsOutline")=="dialog") {
+    runGadget(ui, server, viewer = dialogViewer("Table of Contents Rmd", height = 600,width = 900))
+  } else if (getOption("addinsOutline")=="pane") {
+    runGadget(ui, server, viewer = paneViewer())
+  } else {
+    runGadget(ui, server, viewer = browserViewer())
+  }
 }
 
 #get_tcontents()
