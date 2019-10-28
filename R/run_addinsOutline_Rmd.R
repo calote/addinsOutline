@@ -6,7 +6,7 @@
 #'
 #' @return RStudio Addins with browserViewer()
 #'
-#' @seealso The function \code{\link{run_addinsOutline_tex}()}.
+#' @seealso The function \code{\link{run_addinsOutline_Rmd_bookdown}()} and \code{\link{run_addinsOutline_tex}()}.
 #'
 #' @examples
 #' \dontrun{
