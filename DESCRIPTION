@@ -1,6 +1,6 @@
 Package: addinsOutline
 Type: Package
-Title: Addins RStudio displays outline of an R Markdown (Bookdown and LaTeX) project with and without child files
+Title: Addins RStudio Displays Outline of an R Markdown (Bookdown and LaTeX) Project with and without Child Files
 Version: 0.1.6
 Date: 2019-10-29
 Authors@R: c(
@@ -12,7 +12,6 @@ Authors@R: c(
     )
 Description: Addins RStudio displays outline of an R Markdown project with 
     and without child files. Also Bookdown and LaTeX projects.
-Maintainer: Pedro L. Luque Calvo <calvo@us.es>
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
