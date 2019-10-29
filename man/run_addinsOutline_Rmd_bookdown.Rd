@@ -15,9 +15,10 @@ and without child files.
 }
 \examples{
 \dontrun{
-run_addinsOutline_Rmd()
+run_addinsOutline_Rmd_bookdown()
 }
 }
 \seealso{
-The function \code{\link{run_addinsOutline_tex}()}.
+The function \code{\link{run_addinsOutline_tex}()} and
+\code{\link{run_addinsOutline_Rmd}()}.
 }
