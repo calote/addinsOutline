@@ -1,21 +1,30 @@
 Package: addinsOutline
 Type: Package
-Title: Addins Displays Outline of an R Markdown (Bookdown and LaTeX) project with and without child files
+Title: Addins RStudio displays outline of an R Markdown (Bookdown and LaTeX) project with and without child files
 Version: 0.1.6
-Author: Pedro L. Luque Calvo
-Maintainer: Pedro L. Luque Calvo <calvo@us.es>
-Description: Addins Displays Outline of an R Markdown project with 
+Date: 2019-10-29
+Authors@R: c(
+    person(given = "Pedro L.", 
+           family = "Luque-Calvo", 
+           role = c("aut", "cre"), 
+           email = "calvo@us.es",
+           comment = c(ORCID = "0000-0001-6660-5326"))
+    )
+Description: Addins RStudio displays outline of an R Markdown project with 
     and without child files. Also Bookdown and LaTeX projects.
+Maintainer: Pedro L. Luque Calvo <calvo@us.es>
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+URL: https://github.com/calote/addinsOutline, http://destio.us.es/calvo
+BugReports: https://github.com/calote/addinsOutline/issues
 Depends:
-    R (>= 3.1)
+    R (>= 3.2)
 Imports:
   shiny (>= 0.13),
   miniUI (>= 0.1),
   rstudioapi (>= 0.5),
-  shinyFiles (>= 0.7.3),
+  shinyFiles (>= 0.7.2),
   stringr,
   dplyr (>= 0.7.7),
   tibble,

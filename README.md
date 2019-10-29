@@ -1,7 +1,8 @@
-
 # addinsOutline
 
+
 <!-- badges: start -->
+[![CRAN\_Release\_Badge](http://www.r-pkg.org/badges/version-ago/addinsOutline)](https://CRAN.R-project.org/package=addinsOutline) [![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/addinsOutline)](https://CRAN.R-project.org/package=addinsOutline)
 <!-- badges: end -->
 
 The goal of "addinsOutline" is to facilitate navigation through the files that constitute a R Markdown, LaTeX or other project.
