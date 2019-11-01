@@ -1,6 +1,6 @@
 Package: addinsOutline
 Type: Package
-Title: Addins RStudio Displays Outline of an R Markdown (Bookdown and LaTeX) Project with and without Child Files
+Title: 'RStudio' Addins for Show Outline of a Project R Markdown/LaTeX
 Version: 0.1.6
 Date: 2019-10-29
 Authors@R: c(
@@ -10,8 +10,13 @@ Authors@R: c(
            email = "calvo@us.es",
            comment = c(ORCID = "0000-0001-6660-5326"))
     )
-Description: Addins RStudio displays outline of an R Markdown project with 
-    and without child files. Also Bookdown and LaTeX projects.
+Description: 'RStudio' allows to show and navigate for the outline of a 
+    R Markdown file, but not for R Markdown projects with multiple 
+    files. For this reason, i have developed several 'RStudio' addins capable 
+    of show project outline. Each addin is specialized in showing projects 
+    of different types: R Markdown project, 'bookdown' package project 
+    and 'LaTeX' project. There is a configuration file that allows you 
+    to customize additional searches.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

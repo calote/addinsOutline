@@ -1,12 +1,13 @@
-#' Copy file configuration from outline in working directory
+#' Copy Configuration File from Outline in Working Directory
 #'
-#' Copy file configuration from outline in working directory
+#' Copy configuration file from outline in working directory
 #' to search for additional terms in our R Markdown or LaTeX project.
 #'
-#' The name of the configuration file has to be "addinsOutline_ini.txt".
+#' The name of the configuration file is "addinsOutline_ini.txt".
 #'
-#' Regular expressions are used to perform searches through
-#' the functions of the "stringr" package.
+#' In the configuration file you can use regular expressions with the help
+#' of the functions of the "stringr" package,
+#' to perform additional custom searches.
 #'
 #' Make a copy of this file to see how new searches are defined.
 #'
@@ -14,20 +15,22 @@
 #'
 #' - "rmd": R Markdown files
 #'
-#' - "rmddb": Bookdown files
+#' - "rmdbd": Bookdown files
 #'
 #' - "tex": LaTeX files
 #'
 #' @param path_to path where the configuration file will be copied
 #' @param overwritefile logical variable;  if \code{TRUE} will overwrite the file if it already exists
 #'
+#' @return Copy configuration file from outline in working directory
+#'
 #' @seealso The function \code{\link{run_addinsOutline_Rmd}()},
 #' \code{\link{run_addinsOutline_Rmd_bookdown}()} and
 #' \code{\link{run_addinsOutline_tex}()}.
 #'
 #' @examples
-#' \dontrun{
-#' copy_file_config_ini_new()
+#' if (interactive()) {
+#'     copy_file_config_ini_new()
 #' }
 #' @export
 copy_file_config_ini_new <- function(path_to=NULL,overwritefile = TRUE) {

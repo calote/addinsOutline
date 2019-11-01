@@ -2,23 +2,28 @@
 % Please edit documentation in R/run_addinsOutline_tex.R
 \name{run_addinsOutline_tex}
 \alias{run_addinsOutline_tex}
-\title{Addins Displays Outline of an tex file}
+\title{Addin for Displays Outline of an LaTeX Project}
 \usage{
 run_addinsOutline_tex()
 }
 \value{
-RStudio Addins with browserViewer()
+Addin 'RStudio' with browserViewer()
+This 'RStudio' addin will show a list of the different sections established
+in the LaTeX project and clicking on any element shown in the list
+will cause 'RStudio' to show that section by opening the file
+that contains it if it was not already open previously.
 }
 \description{
-Addins Displays Outline of an tex file with
+Addin for displays outline of an LaTeX Project with
 and without child files insert with: \code{\\input{}} or
 \code{\\include{}}.
 }
 \examples{
-\dontrun{
-run_addinsOutline_tex()
+if (interactive()) {
+    run_addinsOutline_tex()
 }
 }
 \seealso{
-The function \code{\link{run_addinsOutline_Rmd}()} and \code{\link{run_addinsOutline_Rmd_bookdown}()}.
+The function \code{\link{run_addinsOutline_Rmd}()} and
+    \code{\link{run_addinsOutline_Rmd_bookdown}()}.
 }

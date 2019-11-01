@@ -2,23 +2,28 @@
 % Please edit documentation in R/run_addinsOutline_bookdown.R
 \name{run_addinsOutline_Rmd_bookdown}
 \alias{run_addinsOutline_Rmd_bookdown}
-\title{Addins Displays Outline of an bookdown project and R Markdown file}
+\title{Addin for Displays Outline of an Bookdown Project}
 \usage{
 run_addinsOutline_Rmd_bookdown()
 }
 \value{
-RStudio Addins with browserViewer()
+RStudio Addin with browserViewer()
+This 'RStudio' addin will show a list of the different sections established
+in the 'bookdown' project (R Markdown files in directory project)
+and clicking on any element shown in the list
+will cause 'RStudio' to show that section by opening the file
+that contains it if it was not already open previously.
 }
 \description{
-Addins Displays Outline of an bookdown project and R Markdown file with
-and without child files.
+Addin for displays outline of an bookdown project
+(R Markdown files in directory project).
 }
 \examples{
-\dontrun{
-run_addinsOutline_Rmd_bookdown()
+if (interactive()) {
+   run_addinsOutline_Rmd_bookdown()
 }
 }
 \seealso{
 The function \code{\link{run_addinsOutline_tex}()} and
-\code{\link{run_addinsOutline_Rmd}()}.
+    \code{\link{run_addinsOutline_Rmd}()}.
 }

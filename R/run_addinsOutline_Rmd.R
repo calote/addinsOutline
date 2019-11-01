@@ -1,16 +1,20 @@
-#' Addins Displays Outline of an R Markdown file
+#' Addin for Displays Outline of an R Markdown Project
 #'
-#' Addins Displays Outline of an R Markdown file with
+#' Addin for displays outline of an R Markdown project with
 #' and without child files.
 #'
+#' @return 'RStudio Addin' with browserViewer().
+#' This 'RStudio' addin will show a list of the different sections established
+#' in the R Markdown project and clicking on any element shown in the list
+#' will cause 'RStudio' to show that section by opening the file
+#' that contains it if it was not already open previously.
 #'
-#' @return RStudio Addins with browserViewer()
-#'
-#' @seealso The function \code{\link{run_addinsOutline_Rmd_bookdown}()} and \code{\link{run_addinsOutline_tex}()}.
+#' @seealso The function \code{\link{run_addinsOutline_Rmd_bookdown}()} and
+#'     \code{\link{run_addinsOutline_tex}()}.
 #'
 #' @examples
-#' \dontrun{
-#' run_addinsOutline_Rmd()
+#' if (interactive()) {
+#'     run_addinsOutline_Rmd()
 #' }
 #' @importFrom DT DTOutput renderDT datatable JS
 #' @importFrom dplyr filter select arrange bind_rows tibble %>%
@@ -215,9 +219,11 @@ run_addinsOutline_Rmd <- function() {
                             selected = lficheros[1]
           )
 
-          print(nfichero)
+          #print(nfichero)
+          nfichero
         } else {
-          print("In 1")
+          #print("In 1")
+          "In 1"
         }
 
       } else {
@@ -249,7 +255,8 @@ run_addinsOutline_Rmd <- function() {
                           selected = lficheros[1]
         )
 
-        print(VR_Info$nfichero_prin)
+        #print(VR_Info$nfichero_prin)
+        VR_Info$nfichero_prin
       }
 
 

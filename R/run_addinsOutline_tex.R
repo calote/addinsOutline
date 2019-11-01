@@ -1,17 +1,22 @@
-#' Addins Displays Outline of an tex file
+#' Addin for Displays Outline of an LaTeX Project
 #'
-#' Addins Displays Outline of an tex file with
+#' Addin for displays outline of an LaTeX Project with
 #' and without child files insert with: \code{\\input{}} or
 #' \code{\\include{}}.
 #'
 #'
-#' @return RStudio Addins with browserViewer()
+#' @return Addin 'RStudio' with browserViewer()
+#' This 'RStudio' addin will show a list of the different sections established
+#' in the LaTeX project and clicking on any element shown in the list
+#' will cause 'RStudio' to show that section by opening the file
+#' that contains it if it was not already open previously.
 #'
-#' @seealso The function \code{\link{run_addinsOutline_Rmd}()} and \code{\link{run_addinsOutline_Rmd_bookdown}()}.
+#' @seealso The function \code{\link{run_addinsOutline_Rmd}()} and
+#'     \code{\link{run_addinsOutline_Rmd_bookdown}()}.
 #'
 #' @examples
-#' \dontrun{
-#' run_addinsOutline_tex()
+#' if (interactive()) {
+#'     run_addinsOutline_tex()
 #' }
 #' @importFrom DT DTOutput renderDT datatable JS
 #' @importFrom dplyr filter select arrange bind_rows tibble %>%
@@ -218,9 +223,11 @@ run_addinsOutline_tex <- function() {
                             selected = lficheros[1]
           )
 
-          print(nfichero)
+          #print(nfichero)
+          nfichero
         } else {
-          print("In 1")
+          #print("In 1")
+          "In 1"
         }
 
       } else {
@@ -253,7 +260,8 @@ run_addinsOutline_tex <- function() {
                           selected = lficheros[1]
         )
 
-        print(VR_Info$nfichero_prin)
+        #print(VR_Info$nfichero_prin)
+        VR_Info$nfichero_prin
       }
 
 
