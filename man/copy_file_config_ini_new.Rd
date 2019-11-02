@@ -37,7 +37,8 @@ The following strings serve to distinguish which types of files will be used:
 }
 \examples{
 if (interactive()) {
-    copy_file_config_ini_new()
+   library(addinsOutline)
+   copy_file_config_ini_new()
 }
 }
 \seealso{

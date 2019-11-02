@@ -20,7 +20,8 @@ and without child files insert with: \code{\\input{}} or
 }
 \examples{
 if (interactive()) {
-    run_addinsOutline_tex()
+   library(addinsOutline)
+   run_addinsOutline_tex()
 }
 }
 \seealso{

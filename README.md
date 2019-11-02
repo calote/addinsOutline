@@ -14,7 +14,7 @@ In addition, by modifying the configuration file "addinsOutline_ini.txt" that ca
 There are different functions to activate the addins corresponding to the type of project:
 
 - `run_addinsOutline_Rmd()`: R Markdown projects
-- `run_addinsOutline_Rmd_bookdown()`: Bookdown projects
+- `run_addinsOutline_Rmd_bookdown()`: Bookdown projects (select the file _bookdown.yml or index.Rmd)
 - `run_addinsOutline_tex()`: LaTeX projects
 
 
@@ -24,6 +24,9 @@ You can install the released version of addinsOutline from [CRAN](https://CRAN.R
 
 ``` r
 install.packages("addinsOutline")
+
+# For dev version
+devtools::install_github("calote/addinsOutline")
 ```
 
 ## Example

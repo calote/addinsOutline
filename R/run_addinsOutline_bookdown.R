@@ -9,12 +9,14 @@
 #' and clicking on any element shown in the list
 #' will cause 'RStudio' to show that section by opening the file
 #' that contains it if it was not already open previously.
+#' To open a bookdown project select the file _bookdown.yml or index.Rmd.
 #'
 #' @seealso The function \code{\link{run_addinsOutline_tex}()} and
 #'     \code{\link{run_addinsOutline_Rmd}()}.
 #'
 #' @examples
 #' if (interactive()) {
+#'    library(addinsOutline)
 #'    run_addinsOutline_Rmd_bookdown()
 #' }
 #' @importFrom DT DTOutput renderDT datatable JS

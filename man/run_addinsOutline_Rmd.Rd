@@ -19,7 +19,8 @@ and without child files.
 }
 \examples{
 if (interactive()) {
-    run_addinsOutline_Rmd()
+   library(addinsOutline)
+   run_addinsOutline_Rmd()
 }
 }
 \seealso{

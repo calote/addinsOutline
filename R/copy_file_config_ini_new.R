@@ -30,7 +30,8 @@
 #'
 #' @examples
 #' if (interactive()) {
-#'     copy_file_config_ini_new()
+#'    library(addinsOutline)
+#'    copy_file_config_ini_new()
 #' }
 #' @export
 copy_file_config_ini_new <- function(path_to=NULL,overwritefile = TRUE) {

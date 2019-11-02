@@ -16,7 +16,8 @@
 #'
 #' @examples
 #' if (interactive()) {
-#'     run_addinsOutline_tex()
+#'    library(addinsOutline)
+#'    run_addinsOutline_tex()
 #' }
 #' @importFrom DT DTOutput renderDT datatable JS
 #' @importFrom dplyr filter select arrange bind_rows tibble %>%

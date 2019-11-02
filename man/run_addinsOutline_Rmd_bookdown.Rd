@@ -13,6 +13,7 @@ in the 'bookdown' project (R Markdown files in directory project)
 and clicking on any element shown in the list
 will cause 'RStudio' to show that section by opening the file
 that contains it if it was not already open previously.
+To open a bookdown project select the file _bookdown.yml or index.Rmd.
 }
 \description{
 Addin for displays outline of an bookdown project
@@ -20,6 +21,7 @@ Addin for displays outline of an bookdown project
 }
 \examples{
 if (interactive()) {
+   library(addinsOutline)
    run_addinsOutline_Rmd_bookdown()
 }
 }
