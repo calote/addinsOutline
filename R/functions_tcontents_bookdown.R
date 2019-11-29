@@ -419,19 +419,19 @@ func_limpiar_mejorado_bookdown = function(tb_lr,tb_limp) {
   for (i in 1:nrow(tb_lr)) {
     fila = tb_lr$PosicionFila[i]
     fichero = tb_lr$Fichero[i]
-    Bsi = F
-    Bsi1 = F
-    Bsisi2 = F
+    Bsi = FALSE
+    Bsi1 = FALSE
+    Bsisi2 = FALSE
     j = 1
     while (j <= nrow(tb_limp)) {
       fichero2 = tb_limp$Fichero[j]
       if (fichero==fichero2) {
-        Bsi = T
-        Bsi1 = T
+        Bsi = TRUE
+        Bsi1 = TRUE
         fila2 = tb_limp$PosicionFila[j]
         tipo2 = tb_limp$TipoChunk[j]
         if ((tipo2=="inicio") & (fila>fila2) ){
-          Bsisi2 = T
+          Bsisi2 = TRUE
           fila3 = tb_limp$PosicionFila[j+1]
           tipo3 = tb_limp$TipoChunk[j+1]
           if ((tipo3=="fin") & (fila<fila3) ){
